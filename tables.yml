@@ -1,0 +1,17 @@
+players:
+  player_id: string
+  name: string
+  rank: string
+  join_date: date
+  last_rank_action: date
+  # TODO(punt): flags + IP
+  password: string
+  admin_level: int
+  # Things from olympus: times, last_seen
+cases:
+  id: int
+  player_id: string
+  author_id: string
+  timestamp: TIMESTAMP
+  case_type: string
+  note: string # This is optional. Can be null
