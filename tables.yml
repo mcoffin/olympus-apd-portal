@@ -1,5 +1,5 @@
 players:
-  player_id: string
+  puid: string
   name: string
   rank: string
   join_date: date
@@ -10,8 +10,8 @@ players:
   # Things from olympus: times, last_seen
 cases:
   id: int
-  player_id: string
-  author_id: string
+  puid: string
+  auid: string
   timestamp: TIMESTAMP
   case_type: string
   note: string # This is optional. Can be null
