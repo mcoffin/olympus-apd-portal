@@ -90,6 +90,7 @@ function authorize(onUnauthorized) {
     return function (req, res, next) {
         const token = getAccessToken(req);
         if (token) {
+            // TODO: This can probably be cached with the TTL of the expires_in value
             const requestOptions = {
                 protocol: 'https:',
                 hostname: 'www.googleapis.com',
