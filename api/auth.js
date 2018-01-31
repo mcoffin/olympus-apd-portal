@@ -2,35 +2,14 @@ const express = require('express');
 const passport = require('passport');
 const http = require('http');
 const path = require('path');
+const querystring = require('querystring');
 const config = require('./config');
+const { HttpResponse, httpRequestF } = require('./http-utils');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 const callbackURL = "http://127.0.0.1:8080/auth/google/callback";
 
 const router = express.Router();
-
-class HttpResponse {
-    constructor(res) {
-        this.res = res;
-        // TODO: hint this allocation with content-length header
-        this.body = new Buffer();
-    }
-
-    updateBody(chunk) {
-        this.body = Buffer.concat([this.body, chunk]);
-    }
-}
-
-function httpRequestF(options, reqBody) {
-    return new Promise(function (resolve, reject) {
-        const req = http.request(options, function (res) {
-            res = new HttpResponse(res);
-            res.on('data', res.updateBody);
-            res.on('end', () => resolve(res));
-        });
-        req.on('error', reject(e));
-    });
-}
 
 function encodeQueryParam(key, value, first) {
     let prefix = "&";
@@ -54,22 +33,29 @@ router.get("/google/callback", function (req, res) {
         code: req.query.code,
         client_id: config.google.clientID,
         client_secret: config.google.clientSecret,
-        redirect_uri: callbackURL + "/token",
+        redirect_uri: callbackURL,
+        grant_type: 'authorization_code',
     };
-    body = JSON.stringify(body);
+    body = querystring.stringify(body);
+    console.log("body:\n" + body);
     const requestOptions = {
         protocol: 'https:',
         hostname: 'www.googleapis.com',
         port: 443,
-        method: 'GET',
+        method: 'POST',
         path: '/oauth2/v4/token',
         headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(body),
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
     };
-    httpRequestF(requestOptions)
-        .then((
+    httpRequestF(requestOptions, body)
+        .then((tokenRes) => tokenRes.checkResponse())
+        .then((tokenRes) => JSON.parse(tokenRes.body))
+        .then((tokenRes) => {
+            res.cookie('google_access_token', tokenRes);
+            res.redirect('/');
+        })
+        .catch((e) => res.status(500).send(e.toString));
 });
 
 exports.router = router;
