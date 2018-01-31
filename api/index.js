@@ -16,18 +16,6 @@ app.get("/version", function (req, res) {
     res.send(config.version);
 });
 
-app.get('/login', function (req, res, next) {
-    const options = {
-        root: path.join(__dirname, 'static'),
-        dotfiles: "ignore",
-    };
-    res.sendFile("login.html", options, function (err) {
-        if (err) {
-            next(err);
-        }
-    });
-});
-
 app.use('/auth', auth.router);
 
 const v1 = express.Router();
@@ -41,5 +29,9 @@ v1.get("/foo", function (req, res) {
 });
 
 app.use('/api/v1', v1);
+
+// If all else fails, fall back on static files
+app.use(express.static(path.resolve(__dirname, 'dist')));
+app.use(express.static(path.resolve(__dirname, 'static')));
 
 app.listen(config.bindPort);
