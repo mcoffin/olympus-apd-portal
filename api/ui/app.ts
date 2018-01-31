@@ -17,4 +17,6 @@ export class ApdPortalComponent {
 })
 export class AppModule {}
 
-platformBrowserDynamic().bootstrapModule(AppModule);
+document.addEventListener('DOMContentLoaded', function () {
+    platformBrowserDynamic().bootstrapModule(AppModule);
+});

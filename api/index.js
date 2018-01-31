@@ -4,6 +4,9 @@ const express = require('express');
 //const passport = require('passport');
 const session = require('express-session');
 const path = require('path');
+const webpack = require('webpack');
+const webpackDevMiddleware = require('webpack-dev-middleware');
+const webpackCompiler = webpack(require('./webpack.config'));
 const auth = require('./auth');
 const config = require('./config');
 const app = express();
@@ -11,6 +14,11 @@ const app = express();
 //app.use(session({ secret: 'R3x15M0ng', saveUninitialized: false, resave: false }));
 //app.use(passport.initialize());
 //app.use(passport.session());
+
+// TODO: Make this disablable
+app.use(webpackDevMiddleware(webpackCompiler, {
+    publicPath: '/dist/',
+}));
 
 app.get("/version", function (req, res) {
     res.send(config.version);

@@ -21,10 +21,13 @@
     "@angular/common": "^5.2.2",
     "@angular/compiler": "^5.2.2",
     "@angular/core": "^5.2.2",
+    "@angular/http": "^5.2.2",
     "@angular/platform-browser": "^5.2.2",
     "@angular/platform-browser-dynamic": "^5.2.2",
+    "@angular/router": "^5.2.2",
     "body-parser": "^1.18.2",
     "cookie-parser": "^1.4.3",
+    "core-js": "^2.5.3",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
     "minimist": "^1.2.0",
@@ -34,10 +37,11 @@
     "zone.js": "^0.8.20"
   },
   "devDependencies": {
+    "awesome-typescript-loader": "^3.4.1",
     "json-loader": "^0.5.7",
-    "ts-loader": "^3.4.0",
     "typescript": "^2.6.2",
     "val-loader": "^1.1.0",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "webpack-dev-middleware": "^2.0.4"
   }
 }
