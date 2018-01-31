@@ -25,7 +25,7 @@ function encodeQueryParam(key, value, first) {
 router.get("/google", function (req, res) {
     let url = "https://accounts.google.com/o/oauth2/v2/auth";
     url = url + encodeQueryParam("client_id", config.google.clientID, true);
-    url = url + encodeQueryParam("scope", "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email");
+    url = url + encodeQueryParam("scope", "profile https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email");
     url = url + encodeQueryParam("redirect_uri", "http://127.0.0.1:8080/auth/google/callback");
     url = url + encodeQueryParam("response_type", "code");
     res.redirect(url);
@@ -104,11 +104,10 @@ function authorize(onUnauthorized) {
                     const validClient = tokenRes.aud = config.google.clientID;
                     const validExpiration = tokenRes.expires_in > 0;
                     if (validClient && validExpiration) {
-                        console.log(`token response: ${JSON.stringify(tokenRes)}`);
-                        if (tokenRes.user_id) {
-                            req.user = new User(tokenRes.user_id);
+                        if (tokenRes.sub) {
+                            req.user = new User(tokenRes.sub);
                         }
-                        next()
+                        next();
                     } else {
                         onUnauthorized(req, res, next);
                     }
