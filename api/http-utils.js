@@ -48,7 +48,9 @@ function httpRequestF(options, reqBody) {
             res.res.on('end', () => resolve(res));
         });
         req.on('error', reject);
-        req.write(reqBody);
+        if (reqBody) {
+            req.write(reqBody);
+        }
         req.end();
     });
 }

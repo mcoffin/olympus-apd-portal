@@ -1,3 +1,5 @@
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const express = require('express');
 //const passport = require('passport');
 const session = require('express-session');
@@ -29,7 +31,14 @@ app.get('/login', function (req, res, next) {
 app.use('/auth', auth.router);
 
 const v1 = express.Router();
-v1.use(require('body-parser'));
+v1.use(cookieParser())
+v1.use(auth.authorize(function (req, res, next) {
+    res.status(401).send({ error: "Access denied: You must log in" });
+}));
+v1.use(bodyParser.json());
+v1.get("/foo", function (req, res) {
+    res.send(req.user);
+});
 
 app.use('/api/v1', v1);
 
