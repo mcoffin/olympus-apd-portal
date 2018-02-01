@@ -2,14 +2,14 @@
 	<button mat-menu-item><mat-icon>exit_to_app</mat-icon><span>Logout</span></button>
 </mat-menu>
 <mat-toolbar class="top-toolbar" color="primary">
-	<button mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
+	<button *ngIf="loggedIn" mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
 	<span style="margin-left: 1em;">Olympus APD Portal</span>
 	<span class="dynamic-spacer"></span>
-	<button color="accent" mat-mini-fab [matMenuTriggerFor]="accountMenu">
+	<button *ngIf="loggedIn" color="accent" mat-mini-fab [matMenuTriggerFor]="accountMenu">
 		<mat-icon>account_box</mat-icon>
 	</button>
 </mat-toolbar>
-<mat-sidenav-container class="sidenav-container">
+<mat-sidenav-container *ngIf="loggedIn" class="sidenav-container">
 	<mat-sidenav #sidenav class="sidenav-menu" mode="side" opened="true">
 		<span>Navigation Menu</span>
 	</mat-sidenav>
@@ -17,3 +17,6 @@
 		<router-outlet></router-outlet>
 	</mat-sidenav-content>
 </mat-sidenav-container>
+<section *ngIf="!loggedIn" class="sidenav-container" style="flex: 0; align-items: center; justify-content: center;">
+	<login style="flex: 0;"></login>
+</section>
