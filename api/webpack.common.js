@@ -14,10 +14,12 @@ class SimpleRule {
 }
 
 module.exports = {
+    devtool: "source-map",
     entry: {
         app: './ui/app.ts',
         vendor: './ui/vendor.ts',
         polyfill: './ui/polyfill.ts',
+        theme: 'style-loader!./ui/style.scss',
     },
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -34,11 +36,11 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-                    { loader: 'style-loader' },
                     { loader: 'css-loader' },
                     { loader: 'sass-loader' },
                 ],
             },
+            new SimpleRule(/\.html$/, { loader: 'raw-loader' }),
             new SimpleRule(/\.json$/, { loader: 'json-loader' }),
         ],
     },

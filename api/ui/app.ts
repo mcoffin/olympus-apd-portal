@@ -15,8 +15,9 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { Login } from './login';
 import { OnInit } from '@angular/core';
-
-const style = require('./style.scss');
+import { CookieService } from 'ngx-cookie-service';
+import { LoginService } from './services/auth';
+import { ToolbarCard } from './toolbar-card';
 
 @Component({
     template: '<span>Page not Found</span>'
@@ -30,19 +31,24 @@ const routes: Routes = [
 
 @Component({
     selector: 'apd-portal',
-    templateUrl: './apd-portal.html',
+    styles: [
+        require('./app.scss').toString()
+    ],
+    template: require('./app.html'),
+    host: { 'class': 'apd-portal-app' },
 })
 export class ApdPortalComponent implements OnInit {
-    @Input()
     loggedIn: boolean = false;
 
+    constructor(private loginService: LoginService) {}
+
     ngOnInit() {
-        if (document.cookie.indexOf("google_access_token=") >= 0) {
-            this.loggedIn = true;
-        } else {
-            this.loggedIn = false;
-        }
-	console.log("loggedIn: " + this.loggedIn);
+        this.loggedIn = this.loginService.isLoggedIn;
+        //if (document.cookie.indexOf("google_access_token=") >= 0) {
+        //    this.loggedIn = true;
+        //} else {
+        //    this.loggedIn = false;
+        //}
     }
 }
 
@@ -62,11 +68,15 @@ export class ApdPortalComponent implements OnInit {
         RouterModule.forRoot(routes, {}),
     ],
     declarations: [
+        ToolbarCard,
         Login,
         ApdPortalComponent,
         PageNotFoundComponent,
     ],
-    providers: [],
+    providers: [
+        CookieService,
+        LoginService,
+    ],
     bootstrap: [ ApdPortalComponent ],
 })
 export class AppModule {}

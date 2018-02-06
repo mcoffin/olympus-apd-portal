@@ -1,0 +1,27 @@
+.top-toolbar {
+	position: fixed;
+	top: 0;
+	z-index: 2;
+}
+
+.after-toolbar {
+	padding-top: 64px;
+	min-width: 100%;
+	flex: 1 1 auto;
+
+	mat-sidenav-content {
+		flex: 1 1 auto;
+	}
+}
+
+.route-container {
+	width: 100%;
+	height: 100%;
+	display: flex;
+}
+
+mat-toolbar {
+	.dynamic-spacer {
+		flex: 1 1 auto;
+	}
+}

@@ -4,6 +4,7 @@
         "module": "es6",
         "moduleResolution": "node",
         "sourceMap": true,
-        "experimentalDecorators": true
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
     }
 }
