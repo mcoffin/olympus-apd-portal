@@ -12,6 +12,7 @@
 <mat-sidenav-container class="after-toolbar">
 	<mat-sidenav #sidenav mode="push" [opened]="loggedIn" class="main-sidenav">
 		<div class="sidenav-item-list">
+			<span class="sidenav-header apd-primary-darker">FACTIONS</span>
 			<a *ngFor="let faction of factions" [color]="loc.isCurrentPathEqualTo('/faction/' + faction.id) ? 'accent' : null" [class.mat-raised-button]="loc.isCurrentPathEqualTo('/faction/' + faction.id) ? 'accent' : null" [routerLink]="'/faction/' + faction.id" mat-button>{{faction.name}}</a>
 		</div>
 	</mat-sidenav>

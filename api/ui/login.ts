@@ -6,7 +6,7 @@ import { Component }  from '@angular/core';
     styles: [
         require('./login.scss').toString(),
     ],
-    host: { 'class': 'apd-centered-container apd-greedy-flex' },
+    host: { 'class': 'apd-centered-container apd-greedy-flex apd-background' },
 })
 export class Login {
 }

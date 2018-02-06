@@ -20,6 +20,10 @@ html, body {
 	display: none !important;
 }
 
+.apd-primary-darker {
+	background-color: mat-color($apd-primary, darker);
+}
+
 .apd-portal-app {
 	position: absolute;
 	top: 0;
@@ -33,6 +37,10 @@ html, body {
 
 .apd-greedy-flex {
 	flex: 1;
+}
+
+.apd-background {
+	background-image: url('http://localhost:8080/arma-background.jpg');
 }
 
 .apd-centered-container {
