@@ -1,6 +1,8 @@
 /// <reference types="node" />
 import { Component, NgModule, Input, Output } from '@angular/core';
+import { Location } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,6 +20,8 @@ import { OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 import { LoginService } from './services/auth';
 import { ToolbarCard } from './toolbar-card';
+import { ApdFaction } from './faction';
+import { tap } from 'rxjs/operators';
 
 @Component({
     template: '<span>Page not Found</span>'
@@ -26,6 +30,8 @@ export class PageNotFoundComponent {
 }
 
 const routes: Routes = [
+    { path: '', redirectTo: '/faction/apd', pathMatch: 'full' },
+    { path: 'faction/:id', component: ApdFaction },
     { path: '**', component: PageNotFoundComponent },
 ];
 
@@ -40,7 +46,31 @@ const routes: Routes = [
 export class ApdPortalComponent implements OnInit {
     loggedIn: boolean = false;
 
-    constructor(private loginService: LoginService) {}
+    constructor(private loc: Location, private loginService: LoginService) {
+        this.normalizeQueryParams = Location.normalizeQueryParams;
+        this.factions = [
+            {
+                id: 'apd',
+                name: 'APD',
+            },
+            {
+                id: 'rnr',
+                name: 'R&R'
+            },
+        ];
+    }
+
+    logout(): void {
+        this.loginService.logout()
+            .pipe(
+                tap(() => this.loc.go("/login"))
+            );
+        this.loggedIn = this.loginService.isLoggedIn;
+    }
+
+    sidenavGo(p: string): void {
+        this.loc.go(p);
+    }
 
     ngOnInit() {
         this.loggedIn = this.loginService.isLoggedIn;
@@ -55,6 +85,7 @@ export class ApdPortalComponent implements OnInit {
 @NgModule({
     imports: [
         BrowserModule,
+        HttpClientModule,
         FormsModule,
         HttpModule,
         BrowserAnimationsModule,
@@ -70,6 +101,7 @@ export class ApdPortalComponent implements OnInit {
     declarations: [
         ToolbarCard,
         Login,
+	ApdFaction,
         ApdPortalComponent,
         PageNotFoundComponent,
     ],

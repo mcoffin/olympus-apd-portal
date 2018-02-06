@@ -14,6 +14,36 @@
 	}
 }
 
+mat-sidenav.main-sidenav {
+	padding-top: 64px;
+	min-width: 15em;
+	box-shadow: 3px 0 6px rgba(0,0,0,.24);
+
+	.sidenav-item-group {
+		display: flex;
+		flex-direction: column;
+
+		mat-button-toggle {
+			flex: 1 1 auto;
+			min-width: 100%;
+			display: block;
+			text-align: left;
+		}
+	}
+
+	div.sidenav-item-list {
+		display: flex;
+		flex-direction: column;
+
+		a {
+			flex: 1 1 auto;
+			min-width: 100%;
+			display: block;
+			text-align: left;
+		}
+	}
+}
+
 .route-container {
 	width: 100%;
 	height: 100%;

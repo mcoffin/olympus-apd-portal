@@ -63,6 +63,10 @@ class Config {
         }
     }
 
+    get sessionSecret() {
+        return this.getArgS("session-secret", "SESSION_SECRET", "foo");
+    }
+
     get bindPort() {
         return this.getArgI("bind-port", "BIND_PORT", 8080);
     }

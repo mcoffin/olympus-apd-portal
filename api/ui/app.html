@@ -1,7 +1,7 @@
 <mat-menu #accountMenu="matMenu" yPosition="below">
-	<button mat-menu-item><mat-icon>exit_to_app</mat-icon><span>Logout</span></button>
+	<button (click)="logout()" mat-menu-item><mat-icon>exit_to_app</mat-icon><span>Logout</span></button>
 </mat-menu>
-<mat-toolbar class="top-toolbar" color="primary">
+<mat-toolbar class="top-toolbar mat-elevation-z2" color="primary">
 	<button [hidden]="!loggedIn" mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
 	<span style="margin-left: 1em;">Olympus APD Portal</span>
 	<span class="dynamic-spacer"></span>
@@ -10,8 +10,10 @@
 	</button>
 </mat-toolbar>
 <mat-sidenav-container class="after-toolbar">
-	<mat-sidenav #sidenav mode="side" [opened]="loggedIn">
-		<span>Navigation Menu</span>
+	<mat-sidenav #sidenav mode="over" [opened]="loggedIn" class="main-sidenav">
+		<div class="sidenav-item-list">
+			<a *ngFor="let faction of factions" [color]="loc.isCurrentPathEqualTo('/faction/' + faction.id) ? 'accent' : null" [class.mat-raised-button]="loc.isCurrentPathEqualTo('/faction/' + faction.id) ? 'accent' : null" [routerLink]="'/faction/' + faction.id" mat-button>{{faction.name}}</a>
+		</div>
 	</mat-sidenav>
 	<mat-sidenav-content>
 		<section class="route-container">
