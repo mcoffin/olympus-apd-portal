@@ -5,20 +5,20 @@
 	<button [hidden]="!loggedIn" mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
 	<span style="margin-left: 1em;">Olympus APD Portal</span>
 	<span class="dynamic-spacer"></span>
-	<button [hidden]="!loggedIn" color="accent" mat-mini-fab [matMenuTriggerFor]="accountMenu">
+	<button [hidden]="!loggedIn" mat-icon-button [matMenuTriggerFor]="accountMenu">
 		<mat-icon>account_box</mat-icon>
 	</button>
 </mat-toolbar>
 <mat-sidenav-container class="after-toolbar">
-	<mat-sidenav #sidenav mode="over" [opened]="loggedIn" class="main-sidenav">
+	<mat-sidenav #sidenav mode="push" [opened]="loggedIn" class="main-sidenav">
 		<div class="sidenav-item-list">
 			<a *ngFor="let faction of factions" [color]="loc.isCurrentPathEqualTo('/faction/' + faction.id) ? 'accent' : null" [class.mat-raised-button]="loc.isCurrentPathEqualTo('/faction/' + faction.id) ? 'accent' : null" [routerLink]="'/faction/' + faction.id" mat-button>{{faction.name}}</a>
 		</div>
 	</mat-sidenav>
 	<mat-sidenav-content>
-		<section class="route-container">
+		<div class="route-container">
 			<router-outlet *ngIf="loggedIn"></router-outlet>
 			<login *ngIf="!loggedIn"></login>
-		</section>
+		</div>
 	</mat-sidenav-content>
 </mat-sidenav-container>

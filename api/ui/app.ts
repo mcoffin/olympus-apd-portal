@@ -45,9 +45,9 @@ const routes: Routes = [
 })
 export class ApdPortalComponent implements OnInit {
     loggedIn: boolean = false;
+    factions: any[] = [];
 
     constructor(private loc: Location, private loginService: LoginService) {
-        this.normalizeQueryParams = Location.normalizeQueryParams;
         this.factions = [
             {
                 id: 'apd',
