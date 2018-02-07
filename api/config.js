@@ -53,7 +53,7 @@ class DBConfig {
         this.connection = mysql.createConnection(options);
         this.connection.connect();
 
-        this.query = promisify(connection.query, connection);
+        this.query = promisify(this.connection.query, this.connection);
     }
 
     close() {
