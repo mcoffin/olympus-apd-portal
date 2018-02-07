@@ -45,6 +45,7 @@ v1.get("/", (req, res) => res.send({}));
 v1.get("/login", function (req, res) {
     return res.redirect("/");
 });
+v1.use("/tables", require('./crud'));
 
 app.use('/api/v1', v1);
 
