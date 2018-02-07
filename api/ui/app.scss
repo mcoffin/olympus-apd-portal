@@ -38,29 +38,6 @@ mat-sidenav.main-sidenav {
 			text-align: left;
 		}
 	}
-
-	div.sidenav-item-list {
-		display: flex;
-		flex-direction: column;
-
-		%sidenav-item {
-			flex: 1 1 auto;
-			min-width: 100%;
-		}
-
-		a {
-			@extend %sidenav-item;
-			display: block;
-			text-align: left;
-		}
-
-		.sidenav-header {
-			@extend %sidenav-item;
-			display: block;
-			text-align: left;
-			padding-left: 2em;
-		}
-	}
 }
 
 .route-container {

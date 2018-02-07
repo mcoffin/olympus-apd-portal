@@ -1,16 +1,16 @@
 /// <reference types="node" />
-import { Component, NgModule, Input, Output } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, NgModule, ViewChild, Input, Output } from '@angular/core';
+import { Location, PopStateEvent } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Router, Event, NavigationEnd, Routes } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,6 +21,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { LoginService } from './services/auth';
 import { ToolbarCard } from './toolbar-card';
 import { ApdFaction } from './faction';
+import { ApdSidenavRouter, ApdSidenavRouterHeader } from './sidenav-router';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -46,8 +47,20 @@ const routes: Routes = [
 export class ApdPortalComponent implements OnInit {
     loggedIn: boolean = false;
     factions: any[] = [];
+    @ViewChild('sidenav') sidenav: MatSidenav;
 
-    constructor(private loc: Location, private loginService: LoginService) {
+    private initialLoad: boolean;
+
+    constructor(private router: Router, private loc: Location, private loginService: LoginService) {
+        this.initialLoad = true;
+        router.events.subscribe((evt: Event) => {
+            if (evt instanceof NavigationEnd) {
+                if (!this.initialLoad) {
+                    this.sidenav.close();
+                }
+                this.initialLoad = false;
+            }
+        });
         this.factions = [
             {
                 id: 'apd',
@@ -102,6 +115,8 @@ export class ApdPortalComponent implements OnInit {
         ToolbarCard,
         Login,
 	ApdFaction,
+	ApdSidenavRouterHeader,
+	ApdSidenavRouter,
         ApdPortalComponent,
         PageNotFoundComponent,
     ],

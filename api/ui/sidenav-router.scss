@@ -1,0 +1,27 @@
+section.sidenav-router-container {
+	min-width: 100%;
+	flex: 1 0 auto;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+%sidenav-router-item {
+	flex: 1 0 auto;
+	text-align: left;
+}
+
+:host ::ng-deep [sidenav-router-item] {
+	@extend %sidenav-router-item;
+}
+
+:host ::ng-deep .sidenav-router-item-active {
+	position: relative;
+	width: 100%;
+	left: 1em;
+}
+
+:host ::ng-deep div.sidenav-router-header {
+	@extend %sidenav-router-item;
+	padding-left: 2em;
+}
