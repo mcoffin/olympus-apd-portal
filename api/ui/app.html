@@ -3,7 +3,12 @@
 </mat-menu>
 <mat-toolbar class="top-toolbar mat-elevation-z2" color="primary">
 	<button [hidden]="!loggedIn" mat-icon-button (click)="sidenav.toggle()"><mat-icon>menu</mat-icon></button>
-	<button routerLink="/" mat-button><h2>Olympus APD Portal</h2></button>
+	<button routerLink="/" style="margin-left: 0.2em;" mat-button>
+		<div style="display: flex; flex-direction: row; align-items: center;">
+			<img style="margin-top: 0.2em; margin-bottom: 0.2em;" src="apd-logo.png" width="32px">
+			<h2 style="margin-left: 0.2em;">Olympus APD Portal</h2>
+		</div>
+	</button>
 	<span class="dynamic-spacer"></span>
 	<button [hidden]="!loggedIn" mat-icon-button [matMenuTriggerFor]="accountMenu">
 		<mat-icon>account_box</mat-icon>

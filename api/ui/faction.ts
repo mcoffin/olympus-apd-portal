@@ -5,7 +5,13 @@ import { Observable } from 'rxjs/Observable';
 @Component({
     selector: 'apd-faction',
     template: require('./faction.html'),
-    host: { 'class': 'apd-greedy-flex' },
+    styles: [
+        require('./faction.scss').toString()
+    ],
+    host: {
+        '[class.apd-greedy-flex]': 'true',
+        '[class.apd-background]': 'true',
+    },
 })
 export class ApdFaction {
     factionId: Observable<string>;

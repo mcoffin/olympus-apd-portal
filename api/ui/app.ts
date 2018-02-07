@@ -22,6 +22,7 @@ import { LoginService } from './services/auth';
 import { ToolbarCard } from './toolbar-card';
 import { ApdFaction } from './faction';
 import { ApdSidenavRouter, ApdSidenavRouterHeader } from './sidenav-router';
+import { ApdIndex } from './index';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -31,7 +32,7 @@ export class PageNotFoundComponent {
 }
 
 const routes: Routes = [
-    { path: '', redirectTo: '/faction/apd', pathMatch: 'full' },
+    { path: '', component: ApdIndex },
     { path: 'faction/:id', component: ApdFaction },
     { path: '**', component: PageNotFoundComponent },
 ];
@@ -124,9 +125,10 @@ export class ApdPortalComponent implements OnInit {
     declarations: [
         ToolbarCard,
         Login,
-	ApdFaction,
-	ApdSidenavRouterHeader,
-	ApdSidenavRouter,
+        ApdFaction,
+        ApdSidenavRouterHeader,
+        ApdSidenavRouter,
+        ApdIndex,
         ApdPortalComponent,
         PageNotFoundComponent,
     ],

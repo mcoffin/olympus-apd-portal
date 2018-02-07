@@ -16,9 +16,6 @@ section.sidenav-router-container {
 }
 
 :host ::ng-deep .sidenav-router-item-active {
-	position: relative;
-	width: 100%;
-	left: 1em;
 }
 
 :host ::ng-deep div.sidenav-router-header {
