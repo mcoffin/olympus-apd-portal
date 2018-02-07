@@ -73,12 +73,22 @@ export class ApdPortalComponent implements OnInit {
         ];
     }
 
+    private updateLoginStatus() {
+        this.loginService.isLoggedIn.subscribe(s => {
+            this.loggedIn = s;
+        });
+    }
+
     logout(): void {
         this.loginService.logout()
             .pipe(
-                tap(() => this.loc.go("/login"))
-            );
-        this.loggedIn = this.loginService.isLoggedIn;
+                tap((r) => this.updateLoginStatus()) // TODO: find out how to wait on this
+            )
+            .subscribe(end => {
+                console.log('logged out');
+                this.loc.go('/');
+            });
+
     }
 
     sidenavGo(p: string): void {
@@ -86,7 +96,7 @@ export class ApdPortalComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.loggedIn = this.loginService.isLoggedIn;
+        this.updateLoginStatus();
         //if (document.cookie.indexOf("google_access_token=") >= 0) {
         //    this.loggedIn = true;
         //} else {

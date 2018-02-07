@@ -10,18 +10,18 @@ export class LoginService {
     constructor(private cookieService: CookieService, private http: HttpClient) {}
 
     logout(): Observable<any> {
-        console.log('logging out');
-	this.cookieService.delete('user_id');
-	return this.http.get<any>('http://localhost:8080/logout')
+        return this.http.get('logout', { observe: 'response' })
             .pipe(
-                catchError((e, caught) => {
-                    console.error('error while logging out: ${e}');
-                    return new ErrorObservable("error while logging out");
-                }),
+                tap((r) => {
+                    console.log('logging out');
+                    this.cookieService.delete('user_id');
+                })
             );
     }
 
-    get isLoggedIn(): boolean {
-        return this.cookieService.check('user_id');
+    get isLoggedIn(): Observable<boolean> {
+        return this.http.get('api/v1', { observe: 'response' })
+            .map(r => true)
+            .catch(err => Observable.of(false));
     }
 }

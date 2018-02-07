@@ -41,16 +41,17 @@ v1.use(auth.authenticate(function (req, res, next) {
     res.status(401).send({ error: "Access denied: You must log in" });
 }));
 v1.use(bodyParser.json());
+v1.get("/", (req, res) => res.send({}));
 v1.get("/login", function (req, res) {
     return res.redirect("/");
 });
 
 app.use('/api/v1', v1);
 
-app.get('/logout', auth.authenticate(function (req, res, next) {
+app.get('/logout', cookieParser(), auth.authenticate(function (req, res, next) {
     res.status(401).send({ error: "Access denied: You must log in" });
 }), function (req, res) {
-    res.logout();
+    req.logout();
     res.send({});
 });
 
