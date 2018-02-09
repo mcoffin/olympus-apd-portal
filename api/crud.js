@@ -14,10 +14,11 @@ router.get("/:table", function (req, res) {
             sql = sql.where(`${fieldName} = ?`, fieldValue);
         });
     const sqlString = sql.toString();
-    config.dbConfig.execute(sqlString)
+    config.dbConfig.query(sqlString)
         .then((results) => {
             res.json(results);
-        });
+        })
+        .catch((e) => res.status(500).json({error: e.toString()}));
 });
 
 module.exports = router;
