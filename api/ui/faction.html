@@ -1,6 +1,10 @@
 <p *ngIf="user.admin_level >= 0">admin</p>
 <div class="faction-container">
 	<apd-toolbar-card style="min-width: 100%" title="APD">
+		<ng-container toolbar-card-tools>
+			<span class="dynamic-spacer"></span>
+			<button mat-icon-button><mat-icon>refresh</mat-icon></button>
+		</ng-container>
 		<mat-table #table [dataSource]="playersDataSource">
 			<ng-container matColumnDef="p_name">
 				<mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
