@@ -1,5 +1,8 @@
 <div class="mat-elevation-z2">
-	<mat-toolbar class="toolbar-card-header"><span>{{title}}</span></mat-toolbar>
+	<mat-toolbar class="toolbar-card-header">
+		<span>{{title}}</span>
+		<ng-content select="[toolbar-card-tools]"></ng-content>
+	</mat-toolbar>
 	<mat-card class="mat-elevation-z0 toolbar-card-main">
 		<ng-content></ng-content>
 	</mat-card>
