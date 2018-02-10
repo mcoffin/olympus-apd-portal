@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { tap } from 'rxjs/operators';
-import { PortalAPI } from './services/portal-api';
+import { PortalAPI, Player } from './services/portal-api';
 
 @Component({
     selector: 'apd-faction',
@@ -20,10 +20,15 @@ export class ApdFaction {
     factionId: Observable<string>;
     displayedColumns: string[] = ['p_name', 'puid', 'rank', 'cop_time'];
     playersDataSource: Observable<Object>;
+    user: Player;
 
     constructor(private route: ActivatedRoute, private http: HttpClient, private portalApi: PortalAPI) {
         this.factionId = route.paramMap.map((params): string => params.get('id'));
         this.playersDataSource = portalApi.getPlayers();
+        portalApi.getUser()
+            .subscribe(user => {
+                this.user = user;
+            });
     }
 
     getTimes(puid: string): Observable<string> {

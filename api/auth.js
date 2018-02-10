@@ -3,6 +3,8 @@ const passport = require('passport');
 const http = require('http');
 const path = require('path');
 const querystring = require('querystring');
+const Lazy = require('lazy.js');
+const squel = require('squel');
 const config = require('./config');
 const { HttpResponse, httpRequestF } = require('./http-utils');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
@@ -26,7 +28,21 @@ passport.use(new SteamStrategy({
     apiKey: '2B0181C19824C83DE2319D861F7CD47C',
 }, function (identifier, profile, done) {
     profile.identifier = identifier;
-    return done(null, profile);
+
+    const sql = squel.select()
+        .from('players')
+        .where('puid = ?', profile['_json']['steamid']);
+
+    config.dbConfig.query(sql.toString())
+        .then(res => {
+            if (!res[0]) {
+                throw new Error(`${identifier} not found in database`);
+            }
+            return res[0];
+        })
+        .then(res => Lazy(res).merge(profile).toObject())
+        .then(u => done(null, u))
+        .catch(e => done(e));
 }));
 
 function fixRequestUrl(req, res, next) {

@@ -42,6 +42,7 @@ v1.use(auth.authenticate(function (req, res, next) {
 }));
 v1.use(bodyParser.json());
 v1.get("/", (req, res) => res.send({}));
+v1.get("/user", (req, res) => res.json(req.user));
 v1.get("/login", function (req, res) {
     return res.redirect("/");
 });

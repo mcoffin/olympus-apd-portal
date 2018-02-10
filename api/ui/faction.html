@@ -1,3 +1,4 @@
+<p *ngIf="user.admin_level >= 0">admin</p>
 <div class="faction-container">
 	<apd-toolbar-card style="min-width: 100%" title="APD">
 		<mat-table #table [dataSource]="playersDataSource">

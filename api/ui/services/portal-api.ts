@@ -14,6 +14,11 @@ export class PortalAPI {
     constructor(private http: HttpClient) {
     }
 
+    getUser(): Observable<Player> {
+        return this.http.get<Player>("/api/v1/user", { observe: 'response', responseType: 'json' })
+            .map(res => res.body);
+    }
+
     getPlayers(params?: { [param: string]: string | string[] }): Observable<Player[]> {
         return this.http.get<Player[]>("/api/v1/tables/players", { observe: 'response', responseType: 'json', params: params || undefined })
             .map(res => res.body);
