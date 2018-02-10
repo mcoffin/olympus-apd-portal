@@ -13,6 +13,10 @@
 				<mat-header-cell *matHeaderCellDef>Rank</mat-header-cell>
 				<mat-cell *matCellDef="let element">{{element.rank}}</mat-cell>
 			</ng-container>
+			<ng-container matColumnDef="cop_time">
+				<mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
+				<mat-cell *matCellDef="let element">{{getTimes(element.puid) | async}}</mat-cell>
+			</ng-container>
 			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 			<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
 		</mat-table>

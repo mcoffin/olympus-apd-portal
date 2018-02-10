@@ -17,12 +17,18 @@ import { tap } from 'rxjs/operators';
 })
 export class ApdFaction {
     factionId: Observable<string>;
-    displayedColumns: string[] = ['p_name', 'puid', 'rank'];
+    displayedColumns: string[] = ['p_name', 'puid', 'rank', 'cop_time'];
     playersDataSource: Observable<Object>;
 
     constructor(private route: ActivatedRoute, private http: HttpClient) {
         this.factionId = route.paramMap.map((params): string => params.get('id'));
         this.playersDataSource = this.http.get('/api/v1/tables/players', { observe: 'response', responseType: 'json' })
             .map(resp => resp.body);
+    }
+
+    getTimes(puid: string): Observable<string> {
+        return this.http.get(`http://olympus-entertainment.com/olympus-stats/api.php?pid=${puid}&action=json`, { observe: 'response', responseType: 'json' })
+            .map(resp => resp.body)
+            .map(info => info['cop_time']);
     }
 }
