@@ -18,7 +18,7 @@ import { PortalAPI, Player } from './services/portal-api';
 })
 export class ApdFaction {
     factionId: Observable<string>;
-    displayedColumns: string[] = ['p_name', 'puid', 'rank', 'cop_time'];
+    displayedColumns: string[] = ['p_name', 'puid', 'rank', '_next'];
     playersDataSource: Observable<Object>;
     user: Player;
 

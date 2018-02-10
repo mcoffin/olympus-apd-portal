@@ -1,4 +1,3 @@
-<p *ngIf="user.admin_level >= 0">admin</p>
 <div class="faction-container">
 	<apd-toolbar-card style="min-width: 100%" title="APD">
 		<mat-table #table [dataSource]="playersDataSource">
@@ -14,12 +13,19 @@
 				<mat-header-cell *matHeaderCellDef>Rank</mat-header-cell>
 				<mat-cell *matCellDef="let element">{{element.rank}}</mat-cell>
 			</ng-container>
+			<!--
 			<ng-container matColumnDef="cop_time">
 				<mat-header-cell *matHeaderCellDef>Time</mat-header-cell>
 				<mat-cell *matCellDef="let element">{{getTimes(element.puid) | async}}</mat-cell>
 			</ng-container>
+			-->
+			<ng-container matColumnDef="_next">
+				<mat-header-cell *matHeaderCellDef></mat-header-cell>
+				<mat-cell *matCellDef="let element"><button [routerLink]="[element.puid]" [disabled]="user.admin_level < 0" mat-icon-button><mat-icon>edit</mat-icon></button></mat-cell>
+			</ng-container>
 			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-			<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+			<mat-row *matRowDef="let rows; columns: displayedColumns"></mat-row>
 		</mat-table>
 	</apd-toolbar-card>
+	<router-outlet></router-outlet>
 </div>

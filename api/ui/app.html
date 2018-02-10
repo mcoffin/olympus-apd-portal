@@ -34,6 +34,7 @@
 	<mat-sidenav-content>
 		<div class="route-container">
 			<router-outlet *ngIf="loggedIn"></router-outlet>
+			<router-outlet *ngIf="loggedIn" name="modal"></router-outlet>
 			<login *ngIf="!loggedIn"></login>
 		</div>
 	</mat-sidenav-content>

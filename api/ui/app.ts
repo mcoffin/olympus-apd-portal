@@ -10,11 +10,13 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { RouterModule, Router, Event, NavigationEnd, Routes } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav'; import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
 import { Login } from './login';
 import { OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
@@ -23,6 +25,7 @@ import { ToolbarCard } from './toolbar-card';
 import { ApdFaction } from './faction';
 import { ApdSidenavRouter, ApdSidenavRouterHeader } from './sidenav-router';
 import { ApdIndex } from './index';
+import { PlayerDialog } from './player-dialog';
 import { tap } from 'rxjs/operators';
 import { PortalAPI } from './services/portal-api';
 
@@ -34,7 +37,16 @@ export class PageNotFoundComponent {
 
 const routes: Routes = [
     { path: '', component: ApdIndex },
-    { path: 'faction/:id', component: ApdFaction },
+    {
+        path: 'faction/:id',
+        component: ApdFaction,
+        children: [
+            {
+                path: ':puid',
+                component: PlayerDialog,
+            },
+        ]
+    },
     { path: '**', component: PageNotFoundComponent },
 ];
 
@@ -122,6 +134,7 @@ export class ApdPortalComponent implements OnInit {
         MatButtonModule,
         MatTableModule,
         MatCardModule,
+        MatDialogModule,
         RouterModule.forRoot(routes, {}),
     ],
     declarations: [
@@ -132,12 +145,13 @@ export class ApdPortalComponent implements OnInit {
         ApdSidenavRouter,
         ApdIndex,
         ApdPortalComponent,
+        PlayerDialog,
         PageNotFoundComponent,
     ],
     providers: [
         CookieService,
         LoginService,
-	PortalAPI,
+        PortalAPI,
     ],
     bootstrap: [ ApdPortalComponent ],
 })
