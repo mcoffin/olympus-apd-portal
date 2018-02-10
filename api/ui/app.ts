@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
 import { Login } from './login';
 import { OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
@@ -119,6 +120,7 @@ export class ApdPortalComponent implements OnInit {
         MatIconModule,
         MatButtonToggleModule,
         MatButtonModule,
+        MatTableModule,
         MatCardModule,
         RouterModule.forRoot(routes, {}),
     ],
