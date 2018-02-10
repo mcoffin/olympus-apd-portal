@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { tap } from 'rxjs/operators';
+import { PortalAPI } from './services/portal-api';
 
 @Component({
     selector: 'apd-faction',
@@ -20,10 +21,9 @@ export class ApdFaction {
     displayedColumns: string[] = ['p_name', 'puid', 'rank', 'cop_time'];
     playersDataSource: Observable<Object>;
 
-    constructor(private route: ActivatedRoute, private http: HttpClient) {
+    constructor(private route: ActivatedRoute, private http: HttpClient, private portalApi: PortalAPI) {
         this.factionId = route.paramMap.map((params): string => params.get('id'));
-        this.playersDataSource = this.http.get('/api/v1/tables/players', { observe: 'response', responseType: 'json' })
-            .map(resp => resp.body);
+        this.playersDataSource = portalApi.getPlayers();
     }
 
     getTimes(puid: string): Observable<string> {

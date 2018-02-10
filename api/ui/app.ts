@@ -10,8 +10,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { RouterModule, Router, Event, NavigationEnd, Routes } from '@angular/router';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
-import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav';
-import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule, MatSidenav } from '@angular/material/sidenav'; import { MatIconModule } from '@angular/material/icon';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -25,6 +24,7 @@ import { ApdFaction } from './faction';
 import { ApdSidenavRouter, ApdSidenavRouterHeader } from './sidenav-router';
 import { ApdIndex } from './index';
 import { tap } from 'rxjs/operators';
+import { PortalAPI } from './services/portal-api';
 
 @Component({
     template: '<span>Page not Found</span>'
@@ -137,6 +137,7 @@ export class ApdPortalComponent implements OnInit {
     providers: [
         CookieService,
         LoginService,
+	PortalAPI,
     ],
     bootstrap: [ ApdPortalComponent ],
 })
