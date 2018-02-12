@@ -23,4 +23,9 @@ export class PortalAPI {
         return this.http.get<Player[]>("/api/v1/tables/players", { observe: 'response', responseType: 'json', params: params || undefined })
             .map(res => res.body);
     }
+
+    getPlayer(puid: string): Observable<Player> {
+        return this.getPlayers({puid: puid})
+            .map(players => players[0]);
+    }
 }

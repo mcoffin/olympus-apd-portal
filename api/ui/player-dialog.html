@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>{{data.p_name}}</h1>
+<div mat-dialog-content>
+</div>
+<div *ngIf="canEdit" mat-dialog-actions>
+	<button mat-button (click)="dialogRef.close()">Cancel</button>
+	<button color="primary" mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Save</button>
+</div>
+<div *ngIf="!canEdit" mat-dialog-actions>
+	<button (click)="dialogRef.close()" mat-button cdkFocusInitial>Close</button>
+</div>

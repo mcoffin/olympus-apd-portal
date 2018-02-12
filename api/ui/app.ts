@@ -25,7 +25,7 @@ import { ToolbarCard } from './toolbar-card';
 import { ApdFaction } from './faction';
 import { ApdSidenavRouter, ApdSidenavRouterHeader } from './sidenav-router';
 import { ApdIndex } from './index';
-import { PlayerDialog } from './player-dialog';
+import { PlayerDialog, PlayerDialogBox } from './player-dialog';
 import { tap } from 'rxjs/operators';
 import { PortalAPI } from './services/portal-api';
 
@@ -146,6 +146,7 @@ export class ApdPortalComponent implements OnInit {
         ApdIndex,
         ApdPortalComponent,
         PlayerDialog,
+        PlayerDialogBox,
         PageNotFoundComponent,
     ],
     providers: [
@@ -154,6 +155,9 @@ export class ApdPortalComponent implements OnInit {
         PortalAPI,
     ],
     bootstrap: [ ApdPortalComponent ],
+    entryComponents: [
+        PlayerDialogBox,
+    ],
 })
 export class AppModule {}
 
