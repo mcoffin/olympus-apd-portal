@@ -17,6 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatTabsModule } from '@angular/material/tabs';
 import { Login } from './login';
 import { OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
@@ -26,6 +27,7 @@ import { ApdFaction } from './faction';
 import { ApdSidenavRouter, ApdSidenavRouterHeader } from './sidenav-router';
 import { ApdIndex } from './index';
 import { PlayerDialog, PlayerDialogBox } from './player-dialog';
+import { PlayerDetails } from './player-details';
 import { tap } from 'rxjs/operators';
 import { PortalAPI } from './services/portal-api';
 
@@ -39,11 +41,21 @@ const routes: Routes = [
     { path: '', component: ApdIndex },
     {
         path: 'faction/:id',
-        component: ApdFaction,
         children: [
             {
-                path: ':puid/edit',
-                component: PlayerDialog,
+                path: '',
+                pathMatch: 'full',
+                component: ApdFaction,
+                children: [
+                    {
+                        path: ':puid/edit',
+                        component: PlayerDialog,
+                    },
+                ],
+            },
+            {
+                path: ':puid/details',
+                component: PlayerDetails,
             },
         ]
     },
@@ -135,6 +147,7 @@ export class ApdPortalComponent implements OnInit {
         MatTableModule,
         MatCardModule,
         MatDialogModule,
+        MatTabsModule,
         RouterModule.forRoot(routes, {}),
     ],
     declarations: [
@@ -147,6 +160,7 @@ export class ApdPortalComponent implements OnInit {
         ApdPortalComponent,
         PlayerDialog,
         PlayerDialogBox,
+        PlayerDetails,
         PageNotFoundComponent,
     ],
     providers: [

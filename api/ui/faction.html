@@ -26,6 +26,7 @@
 			<ng-container matColumnDef="_next">
 				<mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
 				<mat-cell *matCellDef="let element">
+					<button routerLink="{{element.puid}}/details" mat-icon-button><mat-icon>details</mat-icon></button>
 					<button routerLink="{{element.puid}}/edit" [disabled]="user.admin_level < 0" mat-icon-button><mat-icon>edit</mat-icon></button>
 					<button color="warn" [disabled]="user.admin_level < 0" mat-icon-button><mat-icon>remove</mat-icon></button>
 				</mat-cell>
