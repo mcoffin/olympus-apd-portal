@@ -18,6 +18,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Login } from './login';
 import { OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
@@ -44,7 +45,6 @@ const routes: Routes = [
         children: [
             {
                 path: '',
-                pathMatch: 'full',
                 component: ApdFaction,
                 children: [
                     {
@@ -148,6 +148,7 @@ export class ApdPortalComponent implements OnInit {
         MatCardModule,
         MatDialogModule,
         MatTabsModule,
+        MatTooltipModule,
         RouterModule.forRoot(routes, {}),
     ],
     declarations: [

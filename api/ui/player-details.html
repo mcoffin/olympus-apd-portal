@@ -1,14 +1,41 @@
 <div class="player-details-container">
 	<apd-toolbar-card style="min-width: 100%;" [title]="player.p_name">
 		<mat-tab-group>
+			<mat-tab label="Overview">
+				<ng-template mat-tab-label>
+					<mat-icon matTooltip="Overview" matTooltipPosition="above">info</mat-icon>
+				</ng-template>
+				<section class="tab-content">
+					TODO: Overview
+				</section>
+			</mat-tab>
 			<mat-tab label="Times">
 				<ng-template mat-tab-label>
-					<mat-icon>history</mat-icon>
+					<mat-icon matTooltip="Times" matTooltipPosition="above">access_time</mat-icon>
 				</ng-template>
-				<ul>
-					<li>Cop: {{player.cop_time}}</li>
-					<li>Medic: {{player.med_time}}</li>
-				</ul>
+				<section class="tab-content">
+					<p>TODO: flesh out</p>
+					<ul>
+						<li>Cop: {{player.cop_time}}</li>
+						<li>Medic: {{player.med_time}}</li>
+					</ul>
+				</section>
+			</mat-tab>
+			<mat-tab label="Comments">
+				<ng-template mat-tab-label>
+					<mat-icon matTooltip="Comments" matTooltipPosition="above">comment</mat-icon>
+				</ng-template>
+				<section class="tab-content">
+					<p>TODO: Comments</p>
+				</section>
+			</mat-tab>
+			<mat-tab label="History">
+				<ng-template mat-tab-label>
+					<mat-icon matTooltip="History" matTooltipPosition="above">change_history</mat-icon>
+				</ng-template>
+				<section class="tab-content">
+					TODO: History
+				</section>
 			</mat-tab>
 		</mat-tab-group>
 	</apd-toolbar-card>
