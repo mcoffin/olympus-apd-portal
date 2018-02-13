@@ -35,6 +35,7 @@
     "core-js": "^2.5.3",
     "css-loader": "^0.28.9",
     "express": "^4.16.2",
+    "express-request-proxy": "^2.0.0",
     "express-session": "^1.15.6",
     "lazy.js": "^0.5.1",
     "minimist": "^1.2.0",

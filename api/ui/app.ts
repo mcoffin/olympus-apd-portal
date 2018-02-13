@@ -42,7 +42,7 @@ const routes: Routes = [
         component: ApdFaction,
         children: [
             {
-                path: ':puid',
+                path: ':puid/edit',
                 component: PlayerDialog,
             },
         ]

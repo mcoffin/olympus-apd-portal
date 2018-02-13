@@ -30,10 +30,4 @@ export class ApdFaction {
                 this.user = user;
             });
     }
-
-    getTimes(puid: string): Observable<string> {
-        return this.http.get(`http://olympus-entertainment.com/olympus-stats/api.php?pid=${puid}&action=json`, { observe: 'response', responseType: 'json' })
-            .map(resp => resp.body)
-            .map(info => info['cop_time']);
-    }
 }

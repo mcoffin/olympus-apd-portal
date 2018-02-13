@@ -43,7 +43,7 @@ export class PlayerDialog {
         });
         dialogRef.afterClosed().subscribe(newPlayer => {
             console.warn('TODO: save player');
-            this.router.navigate(['..'], { relativeTo: this.activatedRoute });
+            this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
         });
     }
 }

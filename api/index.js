@@ -6,6 +6,7 @@ const session = require('express-session');
 const path = require('path');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
+const requestProxy = require('express-request-proxy');
 const webpackCompiler = webpack(require('./webpack.config'));
 const auth = require('./auth');
 const config = require('./config');
@@ -47,6 +48,18 @@ v1.get("/login", function (req, res) {
     return res.redirect("/");
 });
 v1.use("/tables", require('./crud'));
+function addHeader(headerName, headerValue) {
+    return (req, res, next) => {
+        res.set(headerName, headerValue);
+        return next();
+    };
+}
+v1.get('/olympus-stats', addHeader('Content-Type', 'application/json'), requestProxy({
+    url: 'http://olympus-entertainment.com/olympus-stats/api.php',
+    query: {
+        action: 'json',
+    },
+}));
 
 app.use('/api/v1', v1);
 
