@@ -3,7 +3,7 @@ import { Component, NgModule, ViewChild, Input, Output } from '@angular/core';
 import { Location, PopStateEvent } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -19,7 +19,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { BidiModule } from '@angular/cdk/bidi';
 import { Login } from './login';
 import { OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
@@ -30,6 +33,7 @@ import { ApdSidenavRouter, ApdSidenavRouterHeader } from './sidenav-router';
 import { ApdIndex } from './index';
 import { PlayerDialog, PlayerDialogBox } from './player-dialog';
 import { PlayerDetails } from './player-details';
+import { RemoveDialog } from './remove-dialog';
 import { tap } from 'rxjs/operators';
 import { PortalAPI } from './services/portal-api';
 
@@ -143,6 +147,7 @@ export class ApdPortalComponent implements OnInit {
         BrowserModule,
         HttpClientModule,
         FormsModule,
+        ReactiveFormsModule,
         HttpModule,
         BrowserAnimationsModule,
         MatToolbarModule,
@@ -157,6 +162,9 @@ export class ApdPortalComponent implements OnInit {
         MatTabsModule,
         MatTooltipModule,
         MatProgressSpinnerModule,
+        MatFormFieldModule,
+        MatInputModule,
+        BidiModule,
         RouterModule.forRoot(routes, {}),
     ],
     declarations: [
@@ -170,6 +178,7 @@ export class ApdPortalComponent implements OnInit {
         PlayerDialog,
         PlayerDialogBox,
         PlayerDetails,
+        RemoveDialog,
         PageNotFoundComponent,
     ],
     providers: [
@@ -180,6 +189,7 @@ export class ApdPortalComponent implements OnInit {
     bootstrap: [ ApdPortalComponent ],
     entryComponents: [
         PlayerDialogBox,
+        RemoveDialog,
     ],
 })
 export class AppModule {}
