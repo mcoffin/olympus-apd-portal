@@ -1,6 +1,13 @@
 <div class="player-details-container">
 	<apd-toolbar-card style="min-width: 100%;" [title]="player.p_name">
-		<mat-tab-group>
+		<ng-container toolbar-card-tools>
+			<span style="flex: 1 1 auto;"></span>
+			<button routerLink="{{player.puid}}/edit" mat-icon-button><mat-icon>edit</mat-icon></button>
+		</ng-container>
+		<div class="spinner-container">
+			<mat-progress-spinner *ngIf="!player['puid']" mode="indeterminate"></mat-progress-spinner>
+		</div>
+		<mat-tab-group *ngIf="player['puid']">
 			<mat-tab label="Overview">
 				<ng-template mat-tab-label>
 					<mat-icon matTooltip="Overview" matTooltipPosition="above">info</mat-icon>
@@ -40,3 +47,4 @@
 		</mat-tab-group>
 	</apd-toolbar-card>
 </div>
+<router-outlet></router-outlet>

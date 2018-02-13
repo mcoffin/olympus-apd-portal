@@ -19,6 +19,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { Login } from './login';
 import { OnInit } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
@@ -56,6 +57,12 @@ const routes: Routes = [
             {
                 path: ':puid/details',
                 component: PlayerDetails,
+                children: [
+                    {
+                        path: ':puid/edit',
+                        component: PlayerDialog,
+                    },
+                ],
             },
         ]
     },
@@ -149,6 +156,7 @@ export class ApdPortalComponent implements OnInit {
         MatDialogModule,
         MatTabsModule,
         MatTooltipModule,
+        MatProgressSpinnerModule,
         RouterModule.forRoot(routes, {}),
     ],
     declarations: [
