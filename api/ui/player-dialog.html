@@ -3,10 +3,12 @@
 	<p>Cop Time: {{data.cop_time}} minutes</p>
 	<p>Medic Time: {{data.med_time}} minutes</p>
 </div>
-<div *ngIf="canEdit" mat-dialog-actions>
-	<button mat-button (click)="dialogRef.close()">Cancel</button>
-	<button color="primary" mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Save</button>
-</div>
-<div *ngIf="!canEdit" mat-dialog-actions>
-	<button (click)="dialogRef.close()" mat-button cdkFocusInitial>Close</button>
+<div dir="rtl">
+	<mat-dialog-actions *ngIf="canEdit">
+		<button mat-button (click)="dialogRef.close()">Cancel</button>
+		<button color="primary" mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Save</button>
+	</mat-dialog-actions>
+	<mat-dialog-actions *ngIf="!canEdit">
+		<button (click)="dialogRef.close()" mat-button cdkFocusInitial>Close</button>
+	</mat-dialog-actions>
 </div>

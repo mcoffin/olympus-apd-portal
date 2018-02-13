@@ -13,6 +13,9 @@ interface Removal {
     styles: [
         require('./remove-dialog.scss').toString()
     ],
+    host: {
+        '[class.apd-primary-dialog]': 'true',
+    },
 })
 export class RemoveDialog {
     constructor(public dialogRef: MatDialogRef<RemoveDialog>, @Inject(MAT_DIALOG_DATA) public data: Player) {}

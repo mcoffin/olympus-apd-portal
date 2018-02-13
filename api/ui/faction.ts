@@ -36,11 +36,12 @@ export class ApdFaction {
     openRemoveDialog(player: Player) {
         const dialogRef = this.dialog.open(RemoveDialog, {
             data: player,
+            minWidth: '50%',
         });
-        dialogRef.afterClosed().subscribe((playerToRemove?: Player) => {
-            if (playerToRemove) {
-                console.warn('TODO: remove player');
-            }
-        });
+        dialogRef.afterClosed()
+            .filter((removedPlayer?: Player) => removedPlayer ? true : false)
+            .subscribe((removedPlayer?: Player) => {
+                console.warn('TODO: trigger table update');
+            });
     }
 }

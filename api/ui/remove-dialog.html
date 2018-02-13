@@ -1,7 +1,6 @@
 <h2 class="mat-dialog-title">Remove {{data.p_name}}?</h2>
 <form (ngSubmit)="onSubmit(removalForm)" #removalForm="ngForm">
 	<mat-dialog-content style="display: flex; flex-direction: column">
-		<p>Are you sure you want to remove {{data.p_name}}?</p>
 		<mat-form-field style="flex: 1 1 auto;">
 			<textarea matInput ngModel name="comment" placeholder="Reason for removal" style="width: 100%" required></textarea>
 		</mat-form-field>
