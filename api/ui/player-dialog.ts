@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { PortalAPI, Player } from './services/portal-api';
 import { Observable } from 'rxjs/Observable';
+import Lazy from 'lazy.js';
 
 @Component({
     selector: 'player-dialog-box',
@@ -32,8 +33,14 @@ export class PlayerDialog {
         this.puid = activatedRoute.paramMap
             .map(params => params.get('puid'));
 
+        const statsO = this.puid
+            .flatMap(puid => portalApi.olympusStats(puid));
+
         this.puid
             .flatMap(puid => portalApi.getPlayer(puid))
+            .flatMap(player => {
+                return statsO.map(stats => Lazy(player).merge(stats).toObject());
+            })
             .subscribe(player => this.openDialog(player));
     }
 
@@ -41,8 +48,10 @@ export class PlayerDialog {
         let dialogRef = this.dialog.open(PlayerDialogBox, {
             data: player,
         });
-        dialogRef.afterClosed().subscribe(newPlayer => {
-            console.warn('TODO: save player');
+        dialogRef.afterClosed().subscribe((newPlayer?: Player) => {
+            if (newPlayer) {
+                console.warn('TODO: save player');
+            }
             this.router.navigate(['.'], { relativeTo: this.activatedRoute.parent });
         });
     }

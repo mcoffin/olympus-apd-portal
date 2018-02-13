@@ -1,5 +1,7 @@
 <h1 mat-dialog-title>{{data.p_name}}</h1>
 <div mat-dialog-content>
+	<p>Cop Time: {{data.cop_time}} minutes</p>
+	<p>Medic Time: {{data.med_time}} minutes</p>
 </div>
 <div *ngIf="canEdit" mat-dialog-actions>
 	<button mat-button (click)="dialogRef.close()">Cancel</button>
