@@ -5,8 +5,8 @@ const path = require('path');
 const querystring = require('querystring');
 const Lazy = require('lazy.js');
 const squel = require('squel');
+const { HttpResponse, httpRequestF } = require('http-shortcut');
 const config = require('./config');
-const { HttpResponse, httpRequestF } = require('./http-utils');
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const SteamStrategy = require('passport-steam').Strategy;
 

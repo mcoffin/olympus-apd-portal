@@ -1,5 +1,8 @@
 <div class="player-details-container">
 	<apd-toolbar-card style="min-width: 100%;" [title]="player.p_name">
+		<ng-container toolbar-card-pre-tools>
+			<button routerLink="../.." mat-icon-button><mat-icon>keyboard_arrow_left</mat-icon></button>
+		</ng-container>
 		<ng-container toolbar-card-tools>
 			<span style="flex: 1 1 auto;"></span>
 			<button routerLink="{{player.puid}}/edit" mat-icon-button><mat-icon>edit</mat-icon></button>
