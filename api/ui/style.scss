@@ -2,6 +2,12 @@
 
 @include mat-core();
 
+$rnr-primary: mat-palette($mat-green);
+$rnr-accent: mat-palette($mat-amber);
+$rnr-warn: mat-palette($mat-orange);
+
+$rnr-theme: mat-dark-theme($rnr-primary, $rnr-accent, $rnr-warn);
+
 $apd-primary: mat-palette($mat-indigo);
 $apd-accent: mat-palette($mat-blue);
 $apd-warn: mat-palette($mat-red);
@@ -49,3 +55,58 @@ html, body {
 	justify-content: center;
 	align-content: center;
 }
+
+@mixin apd-dashboard-card-theme($apd-t, $rnr-t) {
+	$primary-apd: map-get($apd-t, primary);
+	$primary-rnr: map-get($rnr-t, primary);
+
+	.apd-dashboard-card {
+		@extend .mat-elevation-z2;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		margin-left: 0.83em;
+		min-width: 10%;
+
+		%apd-dashboard-card-item {
+			flex: 1 1 auto;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			padding: 0.83em;
+
+			h1, h2, h3 {
+				margin: 0;
+			}
+		}
+
+		[apd-dashboard-card-title] {
+			@extend %apd-dashboard-card-item;
+		}
+		
+		[apd-dashboard-card-content] {
+			@extend %apd-dashboard-card-item;
+		}
+	}
+
+	.apd-dashboard-card[apd-faction=apd] {
+		[apd-dashboard-card-title] {
+			background-color: mat-color($primary-apd);
+		}
+	}
+
+	.apd-dashboard-card[apd-faction=rnr] {
+		[apd-dashboard-card-title] {
+			background-color: mat-color($primary-rnr);
+		}
+	}
+
+	[dir=rtl] {
+		.apd-dashboard-card {
+			margin: 0;
+			margin-right: 0.83em;
+		}
+	}
+}
+
+@include apd-dashboard-card-theme($apd-theme, $rnr-theme);

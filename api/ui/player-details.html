@@ -15,8 +15,23 @@
 				<ng-template mat-tab-label>
 					<mat-icon matTooltip="Overview" matTooltipPosition="above">info</mat-icon>
 				</ng-template>
-				<section class="tab-content">
-					TODO: Overview
+				<section class="dashboard-tab-content" style="padding: 0.83em;">
+					<div class="apd-dashboard-card" apd-faction="apd">
+						<div apd-dashboard-card-title>
+							<h2>Cop Time</h2>
+						</div>
+						<div apd-dashboard-card-content>
+							<h1>{{player.cop_time}}</h1>
+						</div>
+					</div>
+					<div class="apd-dashboard-card" apd-faction="rnr">
+						<div apd-dashboard-card-title>
+							<h2>Medic Time</h2>
+						</div>
+						<div apd-dashboard-card-content>
+							<h1>{{player.med_time}}</h1>
+						</div>
+					</div>
 				</section>
 			</mat-tab>
 			<mat-tab label="Times">
@@ -24,11 +39,7 @@
 					<mat-icon matTooltip="Times" matTooltipPosition="above">access_time</mat-icon>
 				</ng-template>
 				<section class="tab-content">
-					<p>TODO: flesh out</p>
-					<ul>
-						<li>Cop: {{player.cop_time}}</li>
-						<li>Medic: {{player.med_time}}</li>
-					</ul>
+					<p>TODO: Times</p>
 				</section>
 			</mat-tab>
 			<mat-tab label="Comments">
