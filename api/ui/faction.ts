@@ -23,10 +23,11 @@ export class ApdFaction {
     displayedColumns: string[] = ['p_name', 'puid', 'rank', '_next'];
     playersDataSource: Observable<Player[]>;
     user: Player;
+    pageSize: number = 1;
 
     constructor(private route: ActivatedRoute, private http: HttpClient, private portalApi: PortalAPI, private dialog: MatDialog) {
         this.factionId = route.paramMap.map((params): string => params.get('id'));
-        this.playersDataSource = portalApi.getPlayers();
+        this.playersDataSource = portalApi.getPlayersPaginated({}, this.pageSize);
         portalApi.getUser()
             .subscribe(user => {
                 this.user = user;
