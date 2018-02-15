@@ -2,19 +2,20 @@
 	<apd-toolbar-card style="min-width: 100%" title="APD">
 		<ng-container toolbar-card-tools>
 			<span class="dynamic-spacer"></span>
-			<button [disabled]="user.admin_level < 0" mat-icon-button><mat-icon>add</mat-icon></button>
+			<button mat-icon-button><mat-icon>filter_list</mat-icon></button>
+			<button [disabled]="user && user.admin_level < 0" mat-icon-button><mat-icon>add</mat-icon></button>
 		</ng-container>
-		<mat-table #table [dataSource]="playersDataSource">
+		<mat-table #table [dataSource]="playersDataSource" matSort (matSortChange)="onSortChange($event)">
 			<ng-container matColumnDef="p_name">
-				<mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+				<mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
 				<mat-cell *matCellDef="let element">{{element.p_name}}</mat-cell>
 			</ng-container>
 			<ng-container matColumnDef="puid">
-				<mat-header-cell *matHeaderCellDef>Steam ID</mat-header-cell>
+				<mat-header-cell *matHeaderCellDef mat-sort-header>Steam ID</mat-header-cell>
 				<mat-cell *matCellDef="let element">{{element.puid}}</mat-cell>
 			</ng-container>
 			<ng-container matColumnDef="rank">
-				<mat-header-cell *matHeaderCellDef>Rank</mat-header-cell>
+				<mat-header-cell *matHeaderCellDef mat-sort-header>Rank</mat-header-cell>
 				<mat-cell *matCellDef="let element">{{element.rank}}</mat-cell>
 			</ng-container>
 			<!--
@@ -27,13 +28,14 @@
 				<mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
 				<mat-cell *matCellDef="let element">
 					<button routerLink="{{element.puid}}/details" matTooltip="Details" color="accent" mat-icon-button><mat-icon>details</mat-icon></button>
-					<button routerLink="{{element.puid}}/edit" matTooltip="Edit" [disabled]="user.admin_level < 0" mat-icon-button><mat-icon>edit</mat-icon></button>
-					<button color="warn" [disabled]="user.admin_level < 0" (click)="openRemoveDialog(element)" matTooltip="Remove" mat-icon-button><mat-icon>remove</mat-icon></button>
+					<button routerLink="{{element.puid}}/edit" matTooltip="Edit" [disabled]="user && user.admin_level < 0" mat-icon-button><mat-icon>edit</mat-icon></button>
+					<button color="warn" [disabled]="user && user.admin_level < 0" (click)="openRemoveDialog(element)" matTooltip="Remove" mat-icon-button><mat-icon>remove</mat-icon></button>
 				</mat-cell>
 			</ng-container>
 			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 			<mat-row *matRowDef="let rows; columns: displayedColumns"></mat-row>
 		</mat-table>
+		<apd-spinner [loading]="loading"></apd-spinner>
 		<mat-paginator [length]="playerCount" pageSize="50" [pageSizeOptions]="[1, 5, 10, 50]" showFirstLastButtons="false" (page)="onPaginationChange($event)"></mat-paginator>
 	</apd-toolbar-card>
 	<router-outlet></router-outlet>

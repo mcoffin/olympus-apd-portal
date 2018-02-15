@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { Sort } from '@angular/material/sort';
 
 export interface Player {
     puid: string;
@@ -37,13 +38,16 @@ export class PortalAPI {
             .map(res => res.body);
     }
 
-    getPlayersPaginated(params?: { [param: string]: string | string[] }, offset: number = 0, pageSize?: number) {
+    getPlayersPaginated(params: { [param: string]: string | string[] }, offset: number, pageSize: number, sort: Sort) {
         const headers = {
-            'X-APD-OrderBy': 'puid',
+            'X-APD-OrderBy': sort.active,
             'X-APD-Offset': `${offset}`,
         };
         if (pageSize) {
             headers['X-APD-Limit'] = `${pageSize}`;
+        }
+        if (sort.direction && sort.direction.length > 0) {
+            headers['X-APD-OrderBy-Direction'] = sort.direction;
         }
         return this.http.get<Player[]>("/api/v1/tables/players", { headers: headers, observe: 'response', responseType: 'json', params: params || undefined})
             .map(res => res.body);

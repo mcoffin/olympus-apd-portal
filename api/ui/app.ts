@@ -22,6 +22,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { BidiModule } from '@angular/cdk/bidi';
 import { Login } from './login';
@@ -34,6 +35,7 @@ import { ApdSidenavRouter, ApdSidenavRouterHeader } from './sidenav-router';
 import { ApdIndex } from './index';
 import { PlayerDialog, PlayerDialogBox } from './player-dialog';
 import { ApdRowCard, PlayerDetails } from './player-details';
+import { ApdSpinner } from './apd-spinner';
 import { RemoveDialog } from './remove-dialog';
 import { tap } from 'rxjs/operators';
 import { PortalAPI } from './services/portal-api';
@@ -166,6 +168,7 @@ export class ApdPortalComponent implements OnInit {
         MatFormFieldModule,
         MatInputModule,
         MatPaginatorModule,
+        MatSortModule,
         BidiModule,
         RouterModule.forRoot(routes, {}),
     ],
@@ -182,6 +185,7 @@ export class ApdPortalComponent implements OnInit {
         PlayerDetails,
         RemoveDialog,
         ApdRowCard,
+        ApdSpinner,
         PageNotFoundComponent,
     ],
     providers: [

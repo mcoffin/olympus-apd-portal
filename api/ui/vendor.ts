@@ -9,3 +9,5 @@ import '@angular/animations';
 import '@angular/material';
 
 import 'rxjs';
+
+import 'lazy.js';

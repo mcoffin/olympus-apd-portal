@@ -30,6 +30,7 @@ function crudHandler(isCount) {
                 .catch(e => res.status(500).json({error: e.toString()}));
         }
         const orderBy = req.get('X-APD-OrderBy') || 'puid';
+        const orderByDirection = req.get('X-APD-OrderBy-Direction') || 'asc';
         let limit = pageSize(req.params['table']);
         let userLimit = req.get('X-APD-Limit');
         if (userLimit) {
@@ -38,7 +39,7 @@ function crudHandler(isCount) {
                 limit = userLimit;
             }
         }
-        sql = sql.order(orderBy).limit(limit);
+        sql = sql.order(orderBy, orderByDirection === 'asc').limit(limit);
         let offset = req.get('X-APD-Offset');
         if (offset) {
             offset = parseInt(offset);

@@ -120,3 +120,12 @@ html, body {
 
 @include apd-dashboard-card-theme($apd-theme, $rnr-theme);
 @include apd-row-card-theme($apd-theme);
+
+// I thought the default layout looked out of whack
+mat-header-cell {
+	.mat-sort-header-container {
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+	}
+}

@@ -1,13 +1,29 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { AfterViewInit, Component, ChangeDetectorRef, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Sort } from '@angular/material/sort';
 import { RemoveDialog } from './remove-dialog';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { tap } from 'rxjs/operators';
 import { PortalAPI, Player } from './services/portal-api';
+
+interface Page {
+    offset: number;
+    pageSize: number;
+}
+
+class PageInfo implements Page {
+    offset: number;
+    pageSize: number;
+
+    constructor(evt: PageEvent) {
+        this.pageSize = evt.pageSize;
+        this.offset = this.pageSize * evt.pageIndex;
+    }
+}
 
 @Component({
     selector: 'apd-faction',
@@ -20,18 +36,31 @@ import { PortalAPI, Player } from './services/portal-api';
         '[class.apd-background]': 'true',
     },
 })
-export class ApdFaction {
+export class ApdFaction implements AfterViewInit {
     factionId: Observable<string>;
     displayedColumns: string[] = ['p_name', 'puid', 'rank', '_next'];
-    playersDataSource: Subject<Player[]> = new Subject<Player[]>();
-    user: Player;
+    sortedPlayers: Observable<Player[]>;
+    sort: Subject<Sort>;
+    page: Subject<Page>;
+    loading: boolean = true;
+    playersDataSource: Observable<Player[]>;
+    user?: Player;
     pageSize: number = 1;
     playerCount: number = 0;
 
-    constructor(private route: ActivatedRoute, private http: HttpClient, private portalApi: PortalAPI, private dialog: MatDialog) {
+    constructor(private cdr: ChangeDetectorRef, private route: ActivatedRoute, private http: HttpClient, private portalApi: PortalAPI, private dialog: MatDialog) {
+        this.sort = new Subject();
+        this.page = new Subject();
+        this.playersDataSource = Observable.combineLatest(this.page, this.sort)
+            .flatMap(([page, sort]) => {
+                return this.portalApi.getPlayersPaginated({}, page.offset, page.pageSize, sort)
+                    .pipe(
+                        tap(() => this.loading = false)
+                    );
+            });
+
         this.factionId = route.paramMap.map((params): string => params.get('id'));
-        portalApi.getPlayersPaginated({}, 0, 50)
-            .subscribe(players => this.playersDataSource.next(players));
+
         portalApi.getPlayerCount()
             .subscribe(c => {
                 this.playerCount = c;
@@ -43,10 +72,12 @@ export class ApdFaction {
             });
     }
 
+    onSortChange(evt: Sort) {
+        this.sort.next(evt);
+    }
+
     onPaginationChange(evt: PageEvent) {
-        const offset = evt.pageSize * evt.pageIndex;
-        this.portalApi.getPlayersPaginated({}, offset, evt.pageSize)
-            .subscribe(players => this.playersDataSource.next(players));
+        this.page.next(new PageInfo(evt));
     }
 
     openRemoveDialog(player: Player) {
@@ -59,5 +90,11 @@ export class ApdFaction {
             .subscribe((removedPlayer?: Player) => {
                 console.warn('TODO: trigger table update');
             });
+    }
+
+    ngAfterViewInit() {
+        this.sort.next({active: 'p_name', direction: 'asc'});
+        this.page.next({offset: 0, pageSize: 50});
+        this.cdr.detectChanges();
     }
 }
