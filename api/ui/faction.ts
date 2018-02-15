@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
+import Lazy from 'lazy.js';
 import { RemoveDialog } from './remove-dialog';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -25,6 +26,12 @@ class PageInfo implements Page {
     }
 }
 
+function combineThreeObs(first, second, third) {
+    const oneTwo = Observable.combineLatest(first, second);
+    return Observable.combineLatest(oneTwo, third)
+        .map(([fst, snd]) => [fst[0], fst[1], snd);
+}
+
 @Component({
     selector: 'apd-faction',
     template: require('./faction.html'),
@@ -39,24 +46,40 @@ class PageInfo implements Page {
 export class ApdFaction implements AfterViewInit {
     factionId: Observable<string>;
     displayedColumns: string[] = ['p_name', 'puid', 'rank', '_next'];
-    sortedPlayers: Observable<Player[]>;
+    filters: Subject<{ [key: string]: string | string[] }>;
+    players: Observable<Player[]>;
     sort: Subject<Sort>;
     page: Subject<Page>;
-    loading: boolean = true;
+    localFilter: Subject<string>;
     playersDataSource: Observable<Player[]>;
+    loading: boolean = true;
     user?: Player;
     pageSize: number = 1;
     playerCount: number = 0;
 
     constructor(private cdr: ChangeDetectorRef, private route: ActivatedRoute, private http: HttpClient, private portalApi: PortalAPI, private dialog: MatDialog) {
+        this.localFilter = new Subject();
         this.sort = new Subject();
         this.page = new Subject();
-        this.playersDataSource = Observable.combineLatest(this.page, this.sort)
-            .flatMap(([page, sort]) => {
-                return this.portalApi.getPlayersPaginated({}, page.offset, page.pageSize, sort)
-                    .pipe(
-                        tap(() => this.loading = false)
-                    );
+        this.filters = new Subject();
+        this.players = this.filters
+            .flatMap(params => this.portalApi.getPlayers(params))
+            .pipe(
+                tap(() => this.loading = false)
+            );
+        const filteredPlayers = Observable.combineLatest(this.players, this.localFilter)
+            .map(([players, filterString]) => {
+                console.log(`players: ${JSON.stringify(players)}`);
+                return Lazy(players)
+                    .filter(player => Lazy(player).values().map(v => `${v}`).filter(v => v.toLowerCase().includes(filterString.toLowerCase())).size() > 0)
+                    .toArray();
+            });
+        this.playersDataSource = combineThreeObs(filteredPlayers, this.page, this.sort)
+            .map(([players, page, sort]) => {
+                return Lazy(players)
+                    .slice(page.offset, page.offset + page.pageSize)
+                    .sortBy(sort.active, sort.direction === 'desc')
+                    .toArray();
             });
 
         this.factionId = route.paramMap.map((params): string => params.get('id'));
@@ -92,9 +115,15 @@ export class ApdFaction implements AfterViewInit {
             });
     }
 
+    onLocalFilterChange(v: string) {
+        this.localFilter.next(v);
+    }
+
     ngAfterViewInit() {
         this.sort.next({active: 'p_name', direction: 'asc'});
         this.page.next({offset: 0, pageSize: 50});
+        this.filters.next({});
+        this.localFilter.next('');
         this.cdr.detectChanges();
     }
 }
