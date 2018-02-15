@@ -38,7 +38,7 @@
 				<ng-template mat-tab-label>
 					<mat-icon matTooltip="Times" matTooltipPosition="above">access_time</mat-icon>
 				</ng-template>
-				<section class="tab-content">
+				<section class="tab-content" style="flex-direction: column; justify-content: center; align-items: stretch;">
 					<p>TODO: Times</p>
 				</section>
 			</mat-tab>
@@ -46,7 +46,20 @@
 				<ng-template mat-tab-label>
 					<mat-icon matTooltip="Comments" matTooltipPosition="above">comment</mat-icon>
 				</ng-template>
-				<section class="dashboard-tab-content">
+				<section class="dashboard-tab-content" style="align-items: stretch; flex-direction: column;">
+					<div class="spinner-container" *ngIf="!comments">
+						<mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+					</div>
+					<p *ngIf="comments && comments.length == 0">{{player.p_name}} has no comments!</p>
+					<mat-card *ngFor="let comment of comments" apd-row-card>
+						<mat-card-header>
+							<mat-card-title>{{comment.p_name}}</mat-card-title>
+							<mat-card-subtitle>{{caseTypes[comment.case_type] || comment.case_type}} at {{comment.timestamp}}</mat-card-subtitle>
+						</mat-card-header>
+						<mat-card-content>
+							<p>{{comment.comment}}</p>
+						</mat-card-content>
+					</mat-card>
 				</section>
 			</mat-tab>
 			<mat-tab label="History">

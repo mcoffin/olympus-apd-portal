@@ -1,8 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, Directive } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Comment, PortalAPI, Player } from './services/portal-api';
+import CaseTypes from './config/case-types';
 import Lazy from 'lazy.js';
+
+@Directive({
+    selector: '[apd-row-card]',
+    host: {
+        '[class.apd-row-card]': 'true',
+        '[class.mat-elevation-z0]': 'true',
+    },
+})
+export class ApdRowCard {}
 
 @Component({
     selector: 'player-details',
@@ -19,6 +29,7 @@ export class PlayerDetails {
     private puid: Observable<string>;
     comments?: Comment[] = null;
     player: any = {};
+    caseTypes: { [case_type: string]: string } = CaseTypes;
 
     constructor(private activatedRoute: ActivatedRoute, private portalApi: PortalAPI) {
         this.puid = this.activatedRoute.paramMap

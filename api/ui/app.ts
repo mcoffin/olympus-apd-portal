@@ -32,7 +32,7 @@ import { ApdFaction } from './faction';
 import { ApdSidenavRouter, ApdSidenavRouterHeader } from './sidenav-router';
 import { ApdIndex } from './index';
 import { PlayerDialog, PlayerDialogBox } from './player-dialog';
-import { PlayerDetails } from './player-details';
+import { ApdRowCard, PlayerDetails } from './player-details';
 import { RemoveDialog } from './remove-dialog';
 import { tap } from 'rxjs/operators';
 import { PortalAPI } from './services/portal-api';
@@ -179,6 +179,7 @@ export class ApdPortalComponent implements OnInit {
         PlayerDialogBox,
         PlayerDetails,
         RemoveDialog,
+        ApdRowCard,
         PageNotFoundComponent,
     ],
     providers: [

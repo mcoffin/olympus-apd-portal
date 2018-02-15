@@ -56,6 +56,15 @@ html, body {
 	align-content: center;
 }
 
+@mixin apd-row-card-theme($theme) {
+	$primary: map-get($theme, primary);
+
+	mat-card.apd-row-card {
+		flex: 1 1 auto;
+		border-bottom: 1px solid mat-color(map-get($theme, foreground), divider);
+	}
+}
+
 @mixin apd-dashboard-card-theme($apd-t, $rnr-t) {
 	$primary-apd: map-get($apd-t, primary);
 	$primary-rnr: map-get($rnr-t, primary);
@@ -110,3 +119,4 @@ html, body {
 }
 
 @include apd-dashboard-card-theme($apd-theme, $rnr-theme);
+@include apd-row-card-theme($apd-theme);

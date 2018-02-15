@@ -7,6 +7,7 @@ const path = require('path');
 const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const requestProxy = require('express-request-proxy');
+const squel = require('squel');
 const webpackCompiler = webpack(require('./webpack.config'));
 const auth = require('./auth');
 const config = require('./config');
@@ -48,6 +49,16 @@ v1.get("/login", function (req, res) {
     return res.redirect("/");
 });
 v1.use("/tables", require('./crud'));
+v1.get("/players/:puid/comments", function (req, res) {
+    const sql = squel.select()
+        .from('comments', 'c')
+        .join(squel.select().from('players'), 'a', 'a.puid = c.puid')
+        .where('c.puid = ?', req.params['puid'] || null)
+        .order('timestamp', true);
+    config.dbConfig.query(sql.toString())
+        .then((results) => res.json(results))
+        .catch(e => res.status(500).json({error: e.toString()}));
+});
 function addHeader(headerName, headerValue) {
     return (req, res, next) => {
         res.set(headerName, headerValue);

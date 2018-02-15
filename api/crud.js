@@ -13,6 +13,14 @@ router.get("/:table", function (req, res) {
         .each(([fieldName, fieldValue]) => {
             sql = sql.where(`${fieldName} = ?`, fieldValue);
         });
+    const orderBy = req.get('X-APD-OrderBy');
+    if (orderBy) {
+        sql = sql.order(orderBy);
+    }
+    const limit = req.get('X-APD-Limit');
+    if (limit) {
+        sql = sql.limit(parseInt(limit));
+    }
     const sqlString = sql.toString();
     config.dbConfig.query(sqlString)
         .then((results) => {

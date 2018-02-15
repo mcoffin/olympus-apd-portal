@@ -16,7 +16,7 @@ export interface OlympusStats {
     cop_time: string;
 }
 
-export interface Comment {
+export interface Comment extends Player {
     id: number;
     puid: string;
     auid: string;
@@ -58,7 +58,10 @@ export class PortalAPI {
         const params = {
             puid: puid
         };
-        return this.http.get<Comment[]>("/api/v1/tables/comments", { observe: 'response', responseType: 'json', params: params })
+        const headers = {
+            'X-APD-OrderBy': 'timestamp',
+        };
+        return this.http.get<Comment[]>(`/api/v1/players/${puid}/comments`, { headers: headers, observe: 'response', responseType: 'json', params: params })
             .map(res => res.body);
     }
 }
