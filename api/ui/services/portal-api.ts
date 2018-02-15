@@ -37,8 +37,21 @@ export class PortalAPI {
             .map(res => res.body);
     }
 
-    getPlayersPaginated(params?: { [param: string]: string | string[] }, pageSize?: number) {
-        return this.getPlayers(params, 0, [], pageSize);
+    getPlayersPaginated(params?: { [param: string]: string | string[] }, offset: number = 0, pageSize?: number) {
+        const headers = {
+            'X-APD-OrderBy': 'puid',
+            'X-APD-Offset': `${offset}`,
+        };
+        if (pageSize) {
+            headers['X-APD-Limit'] = `${pageSize}`;
+        }
+        return this.http.get<Player[]>("/api/v1/tables/players", { headers: headers, observe: 'response', responseType: 'json', params: params || undefined})
+            .map(res => res.body);
+    }
+
+    getPlayerCount(params?: { [param: string]: string | string[] }): Observable<number> {
+        return this.http.get<number>("/api/v1/tables/players/count", { observe: 'response', responseType: 'json', params: params || undefined})
+            .map(res => res.body['count']);
     }
 
     getPlayers(params?: { [param: string]: string | string[] }, offset: number = 0, players: Player[] = [], pageSize?: number): Observable<Player[]> {
