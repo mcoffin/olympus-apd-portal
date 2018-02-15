@@ -16,6 +16,16 @@ export interface OlympusStats {
     cop_time: string;
 }
 
+export interface Comment {
+    id: number;
+    puid: string;
+    auid: string;
+    comment?: string;
+    timestamp: string;
+    case_type: string;
+    case_data: string;
+}
+
 @Injectable()
 export class PortalAPI {
     constructor(private http: HttpClient) {
@@ -42,5 +52,13 @@ export class PortalAPI {
     getPlayer(puid: string): Observable<Player> {
         return this.getPlayers({puid: puid})
             .map(players => players[0]);
+    }
+
+    getPlayerComments(puid: string): Observable<Comment[]> {
+        const params = {
+            puid: puid
+        };
+        return this.http.get<Comment[]>("/api/v1/tables/comments", { observe: 'response', responseType: 'json', params: params })
+            .map(res => res.body);
     }
 }

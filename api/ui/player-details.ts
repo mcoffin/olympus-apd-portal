@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { PortalAPI, Player } from './services/portal-api';
+import { Comment, PortalAPI, Player } from './services/portal-api';
 import Lazy from 'lazy.js';
 
 @Component({
@@ -17,6 +17,7 @@ import Lazy from 'lazy.js';
 })
 export class PlayerDetails {
     private puid: Observable<string>;
+    comments?: Comment[] = null;
     player: any = {};
 
     constructor(private activatedRoute: ActivatedRoute, private portalApi: PortalAPI) {
@@ -34,5 +35,9 @@ export class PlayerDetails {
                 return p;
             }))
             .subscribe(p => this.player = p);
+
+        this.puid
+            .flatMap(puid => portalApi.getPlayerComments(puid))
+            .subscribe(comments => this.comments = comments);
     }
 }
