@@ -34,6 +34,7 @@
 			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 			<mat-row *matRowDef="let rows; columns: displayedColumns"></mat-row>
 		</mat-table>
+		<mat-paginator [length]="playerCount" pageSize="50" [pageSizeOptions]="[1, 5, 10, 50]" showFirstLastButtons="false" (page)="onPaginationChange($event)"></mat-paginator>
 	</apd-toolbar-card>
 	<router-outlet></router-outlet>
 </div>

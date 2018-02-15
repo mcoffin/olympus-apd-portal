@@ -5,28 +5,61 @@ const Lazy = require('lazy.js');
 
 const config = require('./config');
 
-router.get("/:table", function (req, res) {
-    let sql = squel.select()
-        .from(req.params['table']);
-    Lazy(req.query)
-        .pairs()
-        .each(([fieldName, fieldValue]) => {
-            sql = sql.where(`${fieldName} = ?`, fieldValue);
-        });
-    const orderBy = req.get('X-APD-OrderBy');
-    if (orderBy) {
-        sql = sql.order(orderBy);
-    }
-    const limit = req.get('X-APD-Limit');
-    if (limit) {
-        sql = sql.limit(parseInt(limit));
-    }
-    const sqlString = sql.toString();
-    config.dbConfig.query(sqlString)
-        .then((results) => {
-            res.json(results);
-        })
-        .catch((e) => res.status(500).json({error: e.toString()}));
-});
+const pageSizes = {
+    players: 50,
+};
+
+function pageSize(tableName) {
+    return pageSizes[tableName] || 100;
+}
+
+function crudHandler(isCount) {
+    return function (req, res) {
+        let sql = squel.select()
+            .from(req.params['table']);
+        Lazy(req.query)
+            .pairs()
+            .each(([fieldName, fieldValue]) => {
+                sql = sql.where(`${fieldName} = ?`, fieldValue);
+            });
+        if (isCount) {
+            sql = sql.field('count(*)');
+            return config.dbConfig.query(sql.toString())
+                .then(result => result[0]['count(*)'])
+                .then(count => res.json({count: count}))
+                .catch(e => res.status(500).json({error: e.toString()}));
+        }
+        const orderBy = req.get('X-APD-OrderBy') || 'puid';
+        let limit = pageSize(req.params['table']);
+        let userLimit = req.get('X-APD-Limit');
+        if (userLimit) {
+            userLimit = parseInt(userLimit);
+            if (userLimit < limit) {
+                limit = userLimit;
+            }
+        }
+        sql = sql.order(orderBy).limit(limit);
+        let offset = req.get('X-APD-Offset');
+        if (offset) {
+            offset = parseInt(offset);
+            sql = sql.offset(offset);
+        } else {
+            offset = 0;
+        }
+        const sqlString = sql.toString();
+        config.dbConfig.query(sqlString)
+            .then((results) => {
+                if (results.length >= limit) {
+                    res.set('X-APD-Offset', offset + results.length);
+                }
+                res.json(results);
+            })
+            .catch((e) => res.status(500).json({error: e.toString()}));
+    };
+}
+
+router.get("/:table/count", crudHandler(true));
+
+router.get("/:table", crudHandler(false));
 
 module.exports = router;

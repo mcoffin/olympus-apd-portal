@@ -21,6 +21,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { BidiModule } from '@angular/cdk/bidi';
 import { Login } from './login';
@@ -164,6 +165,7 @@ export class ApdPortalComponent implements OnInit {
         MatProgressSpinnerModule,
         MatFormFieldModule,
         MatInputModule,
+        MatPaginatorModule,
         BidiModule,
         RouterModule.forRoot(routes, {}),
     ],

@@ -37,9 +37,40 @@ export class PortalAPI {
             .map(res => res.body);
     }
 
-    getPlayers(params?: { [param: string]: string | string[] }): Observable<Player[]> {
-        return this.http.get<Player[]>("/api/v1/tables/players", { observe: 'response', responseType: 'json', params: params || undefined })
+    getPlayersPaginated(params?: { [param: string]: string | string[] }, offset: number = 0, pageSize?: number) {
+        const headers = {
+            'X-APD-OrderBy': 'puid',
+            'X-APD-Offset': `${offset}`,
+        };
+        if (pageSize) {
+            headers['X-APD-Limit'] = `${pageSize}`;
+        }
+        return this.http.get<Player[]>("/api/v1/tables/players", { headers: headers, observe: 'response', responseType: 'json', params: params || undefined})
             .map(res => res.body);
+    }
+
+    getPlayerCount(params?: { [param: string]: string | string[] }): Observable<number> {
+        return this.http.get<number>("/api/v1/tables/players/count", { observe: 'response', responseType: 'json', params: params || undefined})
+            .map(res => res.body['count']);
+    }
+
+    getPlayers(params?: { [param: string]: string | string[] }, offset: number = 0, players: Player[] = [], pageSize?: number): Observable<Player[]> {
+        const headers = {
+            'X-APD-OrderBy': 'puid',
+            'X-APD-Offset': `${offset}`,
+        };
+        if (pageSize) {
+            headers['X-APD-Limit'] = `${pageSize}`;
+        }
+        return this.http.get<Player[]>("/api/v1/tables/players", { headers: headers, observe: 'response', responseType: 'json', params: params || undefined })
+            .flatMap(res => {
+                players = players.concat(res.body);
+                if (res.headers.has('X-APD-Offset')) {
+                    return this.getPlayers(params, parseInt(res.headers.get('X-APD-Offset')), players, pageSize)
+                } else {
+                    return Observable.of(players);
+                }
+            });
     }
 
     olympusStats(puid: string): Observable<OlympusStats> {
