@@ -53,7 +53,7 @@
 					<p *ngIf="comments && comments.length == 0">{{player.p_name}} has no comments!</p>
 					<mat-card *ngFor="let comment of comments" apd-row-card>
 						<mat-card-header>
-							<mat-card-title>{{comment.p_name}}</mat-card-title>
+							<mat-card-title>{{comment.author.p_name}}</mat-card-title>
 							<mat-card-subtitle>{{caseTypes[comment.case_type] || comment.case_type}} at {{comment.timestamp}}</mat-card-subtitle>
 						</mat-card-header>
 						<mat-card-content>

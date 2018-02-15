@@ -8,6 +8,7 @@ const webpack = require('webpack');
 const webpackDevMiddleware = require('webpack-dev-middleware');
 const requestProxy = require('express-request-proxy');
 const squel = require('squel');
+const Lazy = require('lazy.js');
 const webpackCompiler = webpack(require('./webpack.config'));
 const auth = require('./auth');
 const config = require('./config');
@@ -52,10 +53,27 @@ v1.use("/tables", require('./crud'));
 v1.get("/players/:puid/comments", function (req, res) {
     const sql = squel.select()
         .from('comments', 'c')
-        .join(squel.select().from('players'), 'a', 'a.puid = c.puid')
+        .join(squel.select().from('players'), 'a', 'a.puid = c.auid')
         .where('c.puid = ?', req.params['puid'] || null)
-        .order('timestamp', true);
+        .order('timestamp', false);
     config.dbConfig.query(sql.toString())
+        .then((results) => {
+            return Lazy(results)
+                .map((entry) => {
+                    entry.author = {
+                        puid: entry.auid,
+                        p_name: entry.p_name,
+                        rank: entry.rank,
+                        admin_level: entry.admin_level,
+                    };
+                    entry.auid = undefined;
+                    entry.p_name = undefined;
+                    entry.rank = undefined;
+                    entry.admin_level = undefined;
+                    return entry;
+                })
+                .toArray();
+        })
         .then((results) => res.json(results))
         .catch(e => res.status(500).json({error: e.toString()}));
 });

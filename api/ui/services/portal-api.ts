@@ -16,7 +16,7 @@ export interface OlympusStats {
     cop_time: string;
 }
 
-export interface Comment extends Player {
+export interface Comment {
     id: number;
     puid: string;
     auid: string;
@@ -24,6 +24,7 @@ export interface Comment extends Player {
     timestamp: string;
     case_type: string;
     case_data: string;
+    author?: Player;
 }
 
 @Injectable()
