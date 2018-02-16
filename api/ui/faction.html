@@ -6,8 +6,8 @@
 			<button [disabled]="user && user.admin_level < 0" mat-icon-button><mat-icon>add</mat-icon></button>
 		</ng-container>
 		<section style="display: block">
-			<div style="display: flex;">
-				<mat-form-field style="flex: 1 1 auto;"><input #localFilterInput matInput placeholder="Filter" style="flex: 1 1 auto;" (keyup)="onLocalFilterChange(localFilterInput.value)"></mat-form-field>
+			<div style="display: flex; align-items: center;">
+				<mat-form-field style="flex: 1 1 auto;"><input #localFilterInput matInput placeholder="Search" style="flex: 1 1 auto;" (keyup)="onLocalFilterChange(localFilterInput.value)"></mat-form-field>
 			</div>
 		</section>
 		<mat-table #table [dataSource]="playersDataSource" matSort (matSortChange)="onSortChange($event)">

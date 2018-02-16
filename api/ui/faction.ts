@@ -29,7 +29,7 @@ class PageInfo implements Page {
 function combineThreeObs(first, second, third) {
     const oneTwo = Observable.combineLatest(first, second);
     return Observable.combineLatest(oneTwo, third)
-        .map(([fst, snd]) => [fst[0], fst[1], snd);
+        .map(([fst, snd]) => [fst[0], fst[1], snd]);
 }
 
 @Component({
@@ -63,32 +63,30 @@ export class ApdFaction implements AfterViewInit {
         this.page = new Subject();
         this.filters = new Subject();
         this.players = this.filters
-            .flatMap(params => this.portalApi.getPlayers(params))
+            .flatMap(params => this.portalApi.getPlayersPaginated(params))
             .pipe(
                 tap(() => this.loading = false)
             );
         const filteredPlayers = Observable.combineLatest(this.players, this.localFilter)
             .map(([players, filterString]) => {
-                console.log(`players: ${JSON.stringify(players)}`);
                 return Lazy(players)
                     .filter(player => Lazy(player).values().map(v => `${v}`).filter(v => v.toLowerCase().includes(filterString.toLowerCase())).size() > 0)
                     .toArray();
-            });
+            })
+            .pipe(
+                tap(p => this.playerCount = p.length)
+            );
         this.playersDataSource = combineThreeObs(filteredPlayers, this.page, this.sort)
             .map(([players, page, sort]) => {
                 return Lazy(players)
-                    .slice(page.offset, page.offset + page.pageSize)
                     .sortBy(sort.active, sort.direction === 'desc')
+                    .rest(page.offset)
+                    .first(page.pageSize)
                     .toArray();
             });
 
         this.factionId = route.paramMap.map((params): string => params.get('id'));
 
-        portalApi.getPlayerCount()
-            .subscribe(c => {
-                this.playerCount = c;
-                console.log(`updated player count: ${JSON.stringify(this.playerCount)}`);
-            });
         portalApi.getUser()
             .subscribe(user => {
                 this.user = user;

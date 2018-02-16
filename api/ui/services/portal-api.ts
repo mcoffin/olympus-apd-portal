@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
 import { Sort } from '@angular/material/sort';
 
 export interface Player {
@@ -38,19 +39,30 @@ export class PortalAPI {
             .map(res => res.body);
     }
 
-    getPlayersPaginated(params: { [param: string]: string | string[] }, offset: number, pageSize: number, sort: Sort) {
+    getPlayersPaginated(params: { [param: string]: string | string[] }, offset: number = 0, pageSize?: number, sort?: Sort, partialSubject: Subject<Player[]> = new Subject(), players: Player[] = []): Observable<Player[]> {
+        let sortColumn = 'puid';
+        if (sort && sort.active) {
+            sortColumn = sort.active;
+        }
         const headers = {
-            'X-APD-OrderBy': sort.active,
+            'X-APD-OrderBy': sortColumn,
             'X-APD-Offset': `${offset}`,
         };
         if (pageSize) {
             headers['X-APD-Limit'] = `${pageSize}`;
         }
-        if (sort.direction && sort.direction.length > 0) {
+        if (sort && sort.direction && sort.direction.length > 0) {
             headers['X-APD-OrderBy-Direction'] = sort.direction;
         }
-        return this.http.get<Player[]>("/api/v1/tables/players", { headers: headers, observe: 'response', responseType: 'json', params: params || undefined})
-            .map(res => res.body);
+        this.http.get<Player[]>("/api/v1/tables/players", { headers: headers, observe: 'response', responseType: 'json', params: params || undefined})
+            .subscribe(res => {
+                players = players.concat(res.body);
+                partialSubject.next(players);
+                if (res.headers.has('X-APD-Offset')) {
+                    this.getPlayersPaginated(params, parseInt(res.headers.get('X-APD-Offset')), pageSize, sort, partialSubject, players);
+                }
+            });
+        return partialSubject;
     }
 
     getPlayerCount(params?: { [param: string]: string | string[] }): Observable<number> {
