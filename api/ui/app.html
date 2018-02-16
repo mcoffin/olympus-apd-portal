@@ -18,9 +18,12 @@
 	<mat-sidenav #sidenav mode="push" opened="false" class="main-sidenav">
 		<sidenav-router>
 			<div sidenav-router-header>FACTIONS</div>
-			<a *ngFor="let faction of factions" [routerLink]="'/faction/' + faction.id" [routerLinkActive]="['mat-elevation-z8', 'sidenav-router-item-active']" sidenav-router-item mat-button>{{faction.name}}</a>
-			<div sidenav-router-header>GANGS</div>
-			<a routerLink="/gang" [routerLinkActive]="['mat-elevation-z8', 'sidenav-router-item-active']" sidenav-router-item mat-button>Black Flag Ops</a>
+			<ng-container *ngFor="let faction of factions">
+				<a [routerLink]="'/faction/' + faction.id" [routerLinkActive]="['mat-elevation-z8', 'sidenav-router-item-active']" sidenav-router-item mat-button>{{faction.name}}</a>
+				<a [routerLink]="'/faction/' + faction.id + '/inactivity'" [routerLinkActive]="['mat-elevation-z8', 'sidenav-router-item-active']" sidenav-router-item mat-button>{{faction.name}} Inactivity</a>
+			</ng-container>
+			<div sidenav-router-header>ADMIN TOOLS</div>
+			<a routerLink="/admin/import" [routerLinkActive]="['mat-elevation-z8', 'sidenav-router-item-active']" sidenav-router-item mat-button>Import Stats</a>
 		</sidenav-router>
 	</mat-sidenav>
 	<mat-sidenav-content>

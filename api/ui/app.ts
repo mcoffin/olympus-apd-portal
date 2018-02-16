@@ -106,10 +106,10 @@ export class ApdPortalComponent implements OnInit {
                 id: 'apd',
                 name: 'APD',
             },
-            {
-                id: 'rnr',
-                name: 'R&R'
-            },
+            //{
+            //    id: 'rnr',
+            //    name: 'R&R'
+            //},
         ];
     }
 
