@@ -16,6 +16,9 @@ export interface OlympusStats {
     name: string;
     pid: string;
     cop_time: string;
+    med_time: string;
+    arrests: string;
+    revives: string;
 }
 
 export interface Comment {
