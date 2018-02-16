@@ -9,6 +9,7 @@ export interface Player {
     p_name: string;
     rank: string,
     admin_level: number;
+    squad?: string;
     cop_time?: string;
 }
 

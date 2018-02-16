@@ -21,6 +21,10 @@
 				<mat-header-cell *matHeaderCellDef mat-sort-header>Steam ID</mat-header-cell>
 				<mat-cell *matCellDef="let element">{{element.puid}}</mat-cell>
 			</ng-container>
+			<ng-container matColumnDef="squad">
+				<mat-header-cell *matHeaderCellDef mat-sort-header>Squad</mat-header-cell>
+				<mat-cell *matCellDef="let element">{{element.squad}}</mat-cell>
+			</ng-container>
 			<ng-container matColumnDef="rank">
 				<mat-header-cell *matHeaderCellDef mat-sort-header>Rank</mat-header-cell>
 				<mat-cell *matCellDef="let element">{{element.rank}}</mat-cell>
@@ -36,7 +40,8 @@
 				<mat-cell *matCellDef="let element">
 					<button routerLink="{{element.puid}}/details" matTooltip="Details" color="primary" mat-icon-button><mat-icon>details</mat-icon></button>
 					<button routerLink="{{element.puid}}/edit" matTooltip="Edit" [disabled]="user && user.admin_level < 0" mat-icon-button><mat-icon>edit</mat-icon></button>
-					<button color="warn" [disabled]="user && user.admin_level < 0" (click)="openRemoveDialog(element)" matTooltip="Remove" mat-icon-button><mat-icon>remove</mat-icon></button>
+					<button *ngIf="element.squad" color="warn" [disabled]="(user && user.admin_level < 0)" (click)="openRemoveDialog(element)" matTooltip="Remove" mat-icon-button><mat-icon>remove</mat-icon></button>
+					<button *ngIf="!element.squad" [disabled]="(user && user.admin_level < 0)" (click)="openReinstateDialog(element)" matTooltip="Reinstate" mat-icon-button><mat-icon>add</mat-icon></button>
 				</mat-cell>
 			</ng-container>
 			<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

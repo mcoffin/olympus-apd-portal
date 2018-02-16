@@ -45,7 +45,7 @@ function combineThreeObs(first, second, third) {
 })
 export class ApdFaction implements AfterViewInit {
     factionId: Observable<string>;
-    displayedColumns: string[] = ['p_name', 'puid', 'rank', '_next'];
+    displayedColumns: string[] = ['p_name', 'puid', 'squad', 'rank', '_next'];
     filters: Subject<{ [key: string]: string | string[] }>;
     players: Observable<Player[]>;
     sort: Subject<Sort>;
@@ -67,6 +67,7 @@ export class ApdFaction implements AfterViewInit {
             .subscribe(filters => this.filterCount = Lazy(filters).size());
         this.players = this.filters
             .flatMap(params => this.portalApi.getPlayersPaginated(params))
+            //.map(players => Lazy(players).filter(p => p.squad).toArray())
             .pipe(
                 tap(() => this.loading = false)
             );
