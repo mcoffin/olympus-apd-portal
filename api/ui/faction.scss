@@ -5,6 +5,19 @@
 	align-items: center;
 }
 
+.toolbar-buttons {
+	button {
+		margin-left: 0.2em;
+	}
+}
+
+.toolbar-buttons[dir=rtl] {
+	button {
+		margin-left: 0;
+		margin-right: 0.2em;
+	}
+}
+
 .dynamic-spacer {
 	flex: 1 1 auto;
 }

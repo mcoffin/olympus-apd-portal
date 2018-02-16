@@ -56,12 +56,15 @@ export class ApdFaction implements AfterViewInit {
     user?: Player;
     pageSize: number = 1;
     playerCount: number = 0;
+    private filterCount: number = 0;
 
     constructor(private cdr: ChangeDetectorRef, private route: ActivatedRoute, private http: HttpClient, private portalApi: PortalAPI, private dialog: MatDialog) {
         this.localFilter = new Subject();
         this.sort = new Subject();
         this.page = new Subject();
         this.filters = new Subject();
+        this.filters
+            .subscribe(filters => this.filterCount = Lazy(filters).size());
         this.players = this.filters
             .flatMap(params => this.portalApi.getPlayersPaginated(params))
             .pipe(
