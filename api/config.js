@@ -54,6 +54,9 @@ class DBConfig {
         this.connection.connect();
 
         this.query = promisify(this.connection.query, this.connection);
+        this.beginTransaction = promisify(this.connection.beginTransaction, this.connection);
+        this.commit = promisify(this.connection.commit, this.connection);
+        this.rollback = promisify(this.connection.rollback, this.connection);
     }
 
     close() {

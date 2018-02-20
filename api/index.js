@@ -50,7 +50,7 @@ v1.get("/login", function (req, res) {
     return res.redirect("/");
 });
 v1.use("/tables", require('./crud'));
-v1.get("/players/:puid/comments", function (req, res) {
+v1.get("/players/:puid/comments", auth.ensureAdminLevel(1), function (req, res) {
     const sql = squel.select()
         .from('comments', 'c')
         .join(squel.select().from('players'), 'a', 'a.puid = c.auid')
@@ -76,6 +76,44 @@ v1.get("/players/:puid/comments", function (req, res) {
         })
         .then((results) => res.json(results))
         .catch(e => res.status(500).json({error: e.toString()}));
+});
+v1.post("/players", auth.ensureAdminLevel(1), (req, res) => {
+    const player = req.body['player'];
+    const comment = req.body['comment'];
+    const auid = req.user.puid;
+    let commentsSql = squel
+        .insert()
+        .into('comments')
+        .set('puid', player.puid)
+        .set('auid', auid)
+        .set('case_type', 'join');
+    if (comment) {
+        commentsSql = commentsSql
+            .set('comment', comment);
+    }
+    let playersSql = squel
+        .insert()
+        .into('players');
+    Lazy(player)
+        .pairs()
+        .each(([k, v]) => {
+            sql = sql.set(k, v);
+        });
+    return config.dbConfig.beginTransaction()
+        .then(() => {
+            config.dbConfig
+                .query(playersSql.toString())
+                .then(() => config.dbConfig.query(commentsSql.toString()))
+                .catch((e) => {
+                    return config.dbConfig.rollback()
+                        .then(() => {
+                            throw e;
+                        });
+                });
+        })
+        .then(() => config.dbConfig.commit())
+        .then(() => res.status(204))
+        .catch((e) => res.status(500).json({error: e.toString()}));
 });
 function addHeader(headerName, headerValue) {
     return (req, res, next) => {

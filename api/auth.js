@@ -66,5 +66,18 @@ function authenticate(onUnauthenticated) {
     };
 }
 
+function ensureAdminLevel(requiredLevel, allowSelf = false) {
+    return function (req, res, next) {
+        if (allowSelf && req.user['puid'] === req.params['puid']) {
+            return next();
+        }
+        if (req.user['admin_level'] < requiredLevel) {
+            return res.status(403).send({error: `required admin level: ${requiredLevel}`});
+        }
+        return next();
+    }
+}
+
 exports.router = router;
 exports.authenticate = authenticate;
+exports.ensureAdminLevel = ensureAdminLevel;
