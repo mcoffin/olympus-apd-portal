@@ -4,7 +4,7 @@
 			<span class="dynamic-spacer"></span>
 			<div class="toolbar-buttons">
 				<button [color]="filterCount > 0 ? 'accent' : 'foreground'" matTooltip="Filters" mat-icon-button><mat-icon>filter_list</mat-icon></button>
-				<button [disabled]="user && user.admin_level < 0" mat-icon-button><mat-icon>add</mat-icon></button>
+				<button [disabled]="user && user.admin_level < 0" (click)="openAddDialog()" mat-icon-button><mat-icon>add</mat-icon></button>
 			</div>
 		</ng-container>
 		<section style="display: block">

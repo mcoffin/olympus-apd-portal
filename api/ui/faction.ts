@@ -6,6 +6,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
 import Lazy from 'lazy.js';
 import { RemoveDialog } from './remove-dialog';
+import { AddNewDialog } from './add-new';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { tap } from 'rxjs/operators';
@@ -113,6 +114,17 @@ export class ApdFaction implements AfterViewInit {
         dialogRef.afterClosed()
             .filter((removedPlayer?: Player) => removedPlayer ? true : false)
             .subscribe((removedPlayer?: Player) => {
+                console.warn('TODO: trigger table update');
+            });
+    }
+
+    openAddDialog() {
+        const dialogRef = this.dialog.open(AddNewDialog, {
+            minWidth: '50%',
+        });
+        dialogRef.afterClosed()
+            .filter((addedPlayer?: Player) => addedPlayer ? true : false)
+            .subscribe((addedPlayer: Player) => {
                 console.warn('TODO: trigger table update');
             });
     }

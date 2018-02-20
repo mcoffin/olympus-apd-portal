@@ -1,0 +1,19 @@
+<h2 class="mat-dialog-title">Add new</h2>
+<form (ngSubmit)="onSubmit(addNewForm)" #addNewForm="ngForm">
+	<mat-dialog-content class="column-container">
+		<div class="input-row">
+			<mat-form-field greedy>
+				<input matInput ngModel name="p_name" placeholder="Player Name" required>
+			</mat-form-field>
+			<mat-form-field>
+				<input matInput ngModel name="puid" placeholder="Steam ID" required>
+			</mat-form-field>
+		</div>
+	</mat-dialog-content>
+	<div dir="rtl">
+		<mat-dialog-actions>
+			<button action="submit" color="primary" mat-raised-button>Add</button>
+			<button mat-button [mat-dialog-close]="null" cdkFocusInitial>Cancel</button>
+		</mat-dialog-actions>
+	</div>
+</form>

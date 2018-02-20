@@ -37,6 +37,7 @@ import { PlayerDialog, PlayerDialogBox } from './player-dialog';
 import { ApdRowCard, PlayerDetails } from './player-details';
 import { ApdSpinner } from './apd-spinner';
 import { RemoveDialog } from './remove-dialog';
+import { AddNewDialog } from './add-new';
 import { tap } from 'rxjs/operators';
 import { PortalAPI } from './services/portal-api';
 
@@ -186,6 +187,7 @@ export class ApdPortalComponent implements OnInit {
         RemoveDialog,
         ApdRowCard,
         ApdSpinner,
+        AddNewDialog,
         PageNotFoundComponent,
     ],
     providers: [
@@ -197,6 +199,7 @@ export class ApdPortalComponent implements OnInit {
     entryComponents: [
         PlayerDialogBox,
         RemoveDialog,
+        AddNewDialog,
     ],
 })
 export class AppModule {}
