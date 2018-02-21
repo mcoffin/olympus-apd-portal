@@ -85,7 +85,7 @@ v1.put("/players/:puid", auth.ensureAdminLevel(1), (req, res) => {
         return res.status(400).json({error: 'You must provide a case_type value for player edits'});
     }
 
-    if (req.body['admin_level'] && req.body['admin_level'] >= req.user.admin_level) {
+    if (req.body['admin_level'] && req.body['admin_level'] > req.user.admin_level) {
         return res.status(403).json({error: 'You cannot create a player of higher admin_level than yourself'});
     }
     // TODO: rank protection
@@ -113,6 +113,7 @@ v1.put("/players/:puid", auth.ensureAdminLevel(1), (req, res) => {
             config.dbConfig
                 .query(playersSql.toString())
                 .then(() => config.dbConfig.query(commentsSql.toString()))
+                .then(() => config.dbConfig.commit())
                 .catch((e) => {
                     return config.dbConfig.rollback()
                         .then(() => {
@@ -120,14 +121,13 @@ v1.put("/players/:puid", auth.ensureAdminLevel(1), (req, res) => {
                         });
                 });
         })
-        .then(() => config.dbConfig.commit())
         .then(() => res.status(204).send(""))
         .catch((e) => res.status(500).json({error: e.toString()}));
 });
 v1.post("/players", auth.ensureAdminLevel(1), (req, res) => {
     const player = req.body['player'];
     player.rank = "Deputy";
-    if (player.admin_level >= req.user.admin_level) {
+    if (player.admin_level > req.user.admin_level) {
         return res.status(403).json({error: 'You cannot create a player of higher admin_level than yourself'});
     }
     // TODO: protect against editing higher ranks
