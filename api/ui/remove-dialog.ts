@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { NgForm, FormControl, Validators } from '@angular/forms';
-import { Player } from './services/portal-api';
+import { PortalAPI, Player } from './services/portal-api';
 
 interface Removal {
     comment: string;
@@ -18,11 +18,11 @@ interface Removal {
     },
 })
 export class RemoveDialog {
-    constructor(public dialogRef: MatDialogRef<RemoveDialog>, @Inject(MAT_DIALOG_DATA) public data: Player) {}
+    constructor(public dialogRef: MatDialogRef<RemoveDialog>, @Inject(MAT_DIALOG_DATA) public data: Player, private portalApi: PortalAPI) {}
     onSubmit(f: NgForm) {
         if (f.valid) {
-            console.warn(`TODO: remove: ${JSON.stringify(f.value)}`);
-            this.dialogRef.close(f.value);
+            this.portalApi.removePlayer(this.data.puid, f.value.comment)
+                .subscribe(v => this.dialogRef.close(v));
         }
     }
 }

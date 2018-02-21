@@ -120,7 +120,7 @@ export class ApdFaction implements AfterViewInit {
 
     openAddDialog() {
         const dialogRef = this.dialog.open(AddNewDialog, {
-            minWidth: '50%',
+            minWidth: '70%',
         });
         dialogRef.afterClosed()
             .filter((addedPlayer?: Player) => addedPlayer ? true : false)

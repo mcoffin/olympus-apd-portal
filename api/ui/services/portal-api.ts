@@ -116,4 +116,17 @@ export class PortalAPI {
         return this.http.get<Comment[]>(`/api/v1/players/${puid}/comments`, { headers: headers, observe: 'response', responseType: 'json', params: params })
             .map(res => res.body);
     }
+
+    addPlayer(req: { player: Player, comment?: string }): Observable<any> {
+        return this.http.post('/api/v1/players', req, { observe: 'response', responseType: 'json' })
+            .map(res => res.body);
+    }
+
+    removePlayer(puid: string, comment?: string): Observable<any> {
+        const body = {
+            comment: comment,
+        };
+        return this.http.post(`/api/v1/players/${puid}/remove`, body, { observe: 'response', responseType: 'json' })
+            .map(res => res.body);
+    }
 }

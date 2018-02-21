@@ -8,6 +8,19 @@
 			<mat-form-field>
 				<input matInput ngModel name="puid" placeholder="Steam ID" required>
 			</mat-form-field>
+			<mat-form-field>
+				<mat-select matInput ngModel name="squad" placeholder="Squad" [value]="squads[0]" required>
+					<mat-option *ngFor="let squad of squads" [value]="squad">{{squad}}</mat-option>
+				</mat-select>
+			</mat-form-field>
+		</div>
+		<mat-form-field>
+			<textarea matInput ngModel name="comment" placeholder="Comment"></textarea>
+		</mat-form-field>
+		<div class="input-row">
+			<mat-form-field style="flex: 0 0 auto;">
+				<input matInput ngModel name="admin_level" placeholder="Admin Level" type="number" value="0" required>
+			</mat-form-field>
 		</div>
 	</mat-dialog-content>
 	<div dir="rtl">

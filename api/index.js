@@ -79,6 +79,7 @@ v1.get("/players/:puid/comments", auth.ensureAdminLevel(1), function (req, res) 
 });
 v1.post("/players", auth.ensureAdminLevel(1), (req, res) => {
     const player = req.body['player'];
+    player.rank = "Deputy";
     const comment = req.body['comment'];
     const auid = req.user.puid;
     let commentsSql = squel
@@ -93,11 +94,12 @@ v1.post("/players", auth.ensureAdminLevel(1), (req, res) => {
     }
     let playersSql = squel
         .insert()
-        .into('players');
+        .into('players')
+        .set('join_date', squel.str('NOW()'));
     Lazy(player)
         .pairs()
         .each(([k, v]) => {
-            sql = sql.set(k, v);
+            playersSql = playersSql.set(k, v);
         });
     return config.dbConfig.beginTransaction()
         .then(() => {
@@ -112,8 +114,40 @@ v1.post("/players", auth.ensureAdminLevel(1), (req, res) => {
                 });
         })
         .then(() => config.dbConfig.commit())
-        .then(() => res.status(204))
+        .then(() => res.status(204).send(""))
         .catch((e) => res.status(500).json({error: e.toString()}));
+});
+v1.post("/players/:puid/remove", auth.ensureAdminLevel(1), (req, res) => {
+    const puid = req.params['puid'];
+    const comment = req.body['comment'];
+    const auid = req.user.puid;
+    const commentsSql = squel
+        .insert()
+        .into('comments')
+        .set('puid', puid)
+        .set('auid', auid)
+        .set('case_type', 'remove')
+        .set('comment', comment);
+    const playersSql = squel
+        .update()
+        .table('players')
+        .set('squad', squel.str('null'))
+        .where('puid = ?', puid);
+    return config.dbConfig.beginTransaction()
+        .then(() => {
+            return config.dbConfig
+                .query(playersSql.toString())
+                .then(() => config.dbConfig.query(commentsSql.toString()))
+                .catch(e => {
+                    return config.dbConfig.rollback()
+                        .then(() => {
+                            throw e;
+                        });
+                });
+        })
+        .then(() => config.dbConfig.commit())
+        .then(() => res.status(204).send(""))
+        .catch(e => res.status(500).json({error: e.toString()}));
 });
 function addHeader(headerName, headerValue) {
     return (req, res, next) => {
