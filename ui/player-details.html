@@ -66,9 +66,9 @@
 					<p>TODO: Times</p>
 				</section>
 			</mat-tab>
-			<mat-tab label="Comments">
+			<mat-tab label="History">
 				<ng-template mat-tab-label>
-					<mat-icon matTooltip="Comments" matTooltipPosition="above">comment</mat-icon>
+					<mat-icon matTooltip="History" matTooltipPosition="above">change_history</mat-icon>
 				</ng-template>
 				<section class="dashboard-tab-content" style="align-items: stretch; flex-direction: column;">
 					<div class="spinner-container" *ngIf="!comments">
@@ -84,14 +84,6 @@
 							<p>{{comment.comment}}</p>
 						</mat-card-content>
 					</mat-card>
-				</section>
-			</mat-tab>
-			<mat-tab label="History">
-				<ng-template mat-tab-label>
-					<mat-icon matTooltip="History" matTooltipPosition="above">change_history</mat-icon>
-				</ng-template>
-				<section class="tab-content">
-					TODO: History
 				</section>
 			</mat-tab>
 		</mat-tab-group>

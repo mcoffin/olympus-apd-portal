@@ -5,6 +5,41 @@
 	align-items: center;
 }
 
+.filter-row {
+	display: flex;
+	flex-flow: row wrap;
+	align-items: flex-start;
+	justify-content: flex-start;
+	padding: 0.83em;
+
+	.filter-column {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		justify-content: flex-start;
+		margin-right: 0.83em;
+
+		mat-checkbox {
+			margin-bottom: 0.2em;
+		}
+	}
+}
+
+.filter-column {
+	[column-title] {
+		text-align: center;
+	}
+}
+
+.filter-row[dir=ltr] {
+	justify-content: flex-end;
+
+	.filter-column {
+		margin-right: 0;
+		margin-left: 0.83em;
+	}
+}
+
 .toolbar-buttons {
 	button {
 		margin-left: 0.2em;

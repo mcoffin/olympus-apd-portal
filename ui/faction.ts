@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { tap } from 'rxjs/operators';
 import { PortalAPI, Player } from './services/portal-api';
+import { FactionData, FactionService } from './services/faction-service';
 
 interface Page {
     offset: number;
@@ -47,7 +48,7 @@ function combineThreeObs(first, second, third) {
 export class ApdFaction implements AfterViewInit {
     factionId: Observable<string>;
     displayedColumns: string[] = ['p_name', 'puid', 'squad', 'rank', '_next'];
-    filters: Subject<{ [key: string]: string | string[] }>;
+    filters: Subject<{ [key: string]: boolean }>;
     players: Observable<Player[]>;
     sort: Subject<Sort>;
     page: Subject<Page>;
@@ -57,16 +58,39 @@ export class ApdFaction implements AfterViewInit {
     user?: Player;
     pageSize: number = 1;
     playerCount: number = 0;
+    private lastFilters: { [key: string]: boolean };
     private filterCount: number = 0;
+    private filterMenu: boolean = false;
+    faction: Observable<FactionData>;
 
-    constructor(private cdr: ChangeDetectorRef, private route: ActivatedRoute, private http: HttpClient, private portalApi: PortalAPI, private dialog: MatDialog, private router: Router) {
+    constructor(private cdr: ChangeDetectorRef, private route: ActivatedRoute, private http: HttpClient, private portalApi: PortalAPI, private dialog: MatDialog, private router: Router, private factions: FactionService) {
         this.localFilter = new Subject();
         this.sort = new Subject();
         this.page = new Subject();
         this.filters = new Subject();
         this.filters
-            .subscribe(filters => this.filterCount = Lazy(filters).size());
+            .pipe(tap(filters => this.lastFilters = filters))
+            .subscribe(filters => {
+                this.filterCount = Lazy(filters)
+                    .pairs()
+                    .filter(([k, v]) => v)
+                    .size();
+            });
         this.players = this.filters
+            .map(filters => {
+                const params: { [key: string]: string | string[] } = {};
+                const nn: string[] = [];
+
+                if (filters.hideRemoved) {
+                    nn.push('squad');
+                }
+
+                if (nn.length > 0) {
+                    params.__not_null = nn;
+                }
+
+                return params;
+            })
             .flatMap(params => this.portalApi.getPlayersPaginated(params))
             //.map(players => Lazy(players).filter(p => p.squad).toArray())
             .pipe(
@@ -91,6 +115,13 @@ export class ApdFaction implements AfterViewInit {
             });
 
         this.factionId = route.paramMap.map((params): string => params.get('id'));
+        this.faction = this.factionId
+            .map(fid => factions.getFaction(fid))
+            .pipe(
+                tap(f => {
+                    f.squads.forEach(squad => this.lastFilters[squad] = true);
+                })
+            );
 
         portalApi.getUser()
             .subscribe(user => {
@@ -98,6 +129,7 @@ export class ApdFaction implements AfterViewInit {
             });
         router.events
             .filter(evt => evt instanceof NavigationEnd)
+            .map(evt => <NavigationEnd> evt)
             .map(evt => evt.url)
             .filter(u => u.startsWith("/faction/") && Lazy(u).split("/").size() === 3)
             .subscribe(() => this.refreshData());
@@ -138,9 +170,13 @@ export class ApdFaction implements AfterViewInit {
             });
     }
 
+    toggleFilterMenu() {
+        this.filterMenu = !this.filterMenu;
+    }
+
     refreshData() {
         this.loading = true;
-        this.filters.next({});
+        this.filters.next(this.lastFilters || {});
     }
 
     onLocalFilterChange(v: string) {

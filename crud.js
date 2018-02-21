@@ -13,6 +13,14 @@ const pageSizes = {
     players: 50,
 };
 
+function orSingleton(a) {
+    if (!Array.isArray(a)) {
+        return [a];
+    } else {
+        return a;
+    }
+}
+
 function pageSize(tableName) {
     return pageSizes[tableName] || 100;
 }
@@ -21,10 +29,21 @@ function crudHandler(isCount) {
     return function (req, res) {
         let sql = squel.select()
             .from(req.params['table']);
+        if (req.query['__not_null']) {
+            Lazy(orSingleton(req.query['__not_null']))
+                .each(fieldName => {
+                    sql = sql.where(`${fieldName} IS NOT NULL`);
+                });
+        }
         Lazy(req.query)
             .pairs()
+            .filter(([k, v]) => k !== '__not_null')
             .each(([fieldName, fieldValue]) => {
-                sql = sql.where(`${fieldName} = ?`, fieldValue);
+                let e = squel.expr();
+                Lazy(orSingleton(fieldValue))
+                    .map(v => squel.expr().and(`${fieldName} = ?`, v))
+                    .each(v => e = e.and(v));
+                sql = sql.where(e);
             });
         if (isCount) {
             sql = sql.field('count(*)');

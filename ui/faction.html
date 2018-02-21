@@ -1,13 +1,21 @@
 <div class="faction-container">
-	<apd-toolbar-card style="min-width: 100%" title="APD">
+	<apd-toolbar-card style="min-width: 100%;" title="APD">
 		<ng-container toolbar-card-tools>
 			<span class="dynamic-spacer"></span>
 			<div class="toolbar-buttons">
 				<button (click)="refreshData()" matTooltip="Refresh" mat-icon-button><mat-icon>refresh</mat-icon></button>
-				<button [color]="filterCount > 0 ? 'accent' : 'foreground'" matTooltip="Filters" mat-icon-button><mat-icon>filter_list</mat-icon></button>
+				<button (click)="toggleFilterMenu()" [color]="filterCount > 0 ? 'accent' : 'foreground'" matTooltip="Filters ({{filterCount}})" mat-icon-button><mat-icon>filter_list</mat-icon></button>
 				<button [disabled]="user && user.admin_level < 0" (click)="openAddDialog()" mat-icon-button><mat-icon>add</mat-icon></button>
 			</div>
 		</ng-container>
+		<section *ngIf="filterMenu" class="apd-darker-background" style="display: block; margin-bottom: 0.83em;">
+			<div class="filter-row">
+				<div class="filter-column">
+					<h4 column-title>Basic</h4>
+					<mat-checkbox matInput (change)="refreshData()" [(ngModel)]="lastFilters.hideRemoved">Hide Removed</mat-checkbox>
+				</div>
+			</div>
+		</section>
 		<section style="display: block">
 			<div style="display: flex; align-items: center;">
 				<mat-form-field style="flex: 1 1 auto;"><input #localFilterInput matInput placeholder="Search" style="flex: 1 1 auto;" (keyup)="onLocalFilterChange(localFilterInput.value)"></mat-form-field>

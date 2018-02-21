@@ -25,6 +25,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { BidiModule } from '@angular/cdk/bidi';
 import { Login } from './login';
@@ -175,6 +176,7 @@ export class ApdPortalComponent implements OnInit {
         MatSortModule,
         MatSelectModule,
         MatSnackBarModule,
+        MatCheckboxModule,
         BidiModule,
         RouterModule.forRoot(routes, {}),
     ],

@@ -68,6 +68,10 @@ html, body {
 @mixin apd-text-theme($apd-t) {
 	$warn: map-get($apd-t, warn);
 
+	.apd-darker-background {
+		background-color: mat-color(map-get($apd-t, background), background);
+	}
+
 	.apd-warn {
 		color: mat-color($warn, darker);
 	}
