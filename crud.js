@@ -5,6 +5,10 @@ const Lazy = require('lazy.js');
 
 const config = require('./config');
 
+const tableWhitelist = [
+    'players',
+];
+
 const pageSizes = {
     players: 50,
 };
@@ -58,6 +62,18 @@ function crudHandler(isCount) {
             .catch((e) => res.status(500).json({error: e.toString()}));
     };
 }
+
+function filterHandler(f) {
+    return function (req, res, next) {
+        if (f(req)) {
+            return next();
+        } else {
+            return res.status(404).json({error: 'Not Found'});
+        }
+    };
+}
+
+router.use('/:table', filterHandler(req => tableWhitelist.includes(req.params['table'])));
 
 router.get("/:table/count", crudHandler(true));
 
