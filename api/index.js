@@ -80,6 +80,9 @@ v1.get("/players/:puid/comments", auth.ensureAdminLevel(1), function (req, res) 
 v1.post("/players", auth.ensureAdminLevel(1), (req, res) => {
     const player = req.body['player'];
     player.rank = "Deputy";
+    if (player.admin_level >= req.user.admin_level) {
+        return res.status(403).json({error: 'You cannot create a player of higher admin_level than yourself'});
+    }
     const comment = req.body['comment'];
     const auid = req.user.puid;
     let commentsSql = squel
