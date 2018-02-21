@@ -46,9 +46,11 @@ export class PlayerDialog {
     }
 
     openDialog(player: Player) {
+        let title = player.squad ? 'Edit' : 'Reinstate';
+        title = title + ' Player';
         let dialogRef = this.dialog.open(AddNewDialog, {
             data: {
-                title: 'Edit Player',
+                title: title,
                 player: player,
                 locked: {
                     'p_name': true,
