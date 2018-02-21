@@ -72,6 +72,7 @@ class Config {
             '519279452507-b5g2d0unnkka2uq50tgqrn48jtq1c6gh.apps.googleusercontent.com',
             'D1sW6cq2WzORTxQed-OBZsud' // TODO: remove from code 
         );
+        this.apd = require('./build/apd-config');
     }
 
     get dbConfig() {

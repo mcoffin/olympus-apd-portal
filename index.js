@@ -12,6 +12,7 @@ const Lazy = require('lazy.js');
 const webpackCompiler = webpack(require('./webpack.config'));
 const auth = require('./auth');
 const config = require('./config');
+const { snagPlayer } = require('./lib/middleware');
 const app = express();
 
 //app.use(session({ secret: 'R3x15M0ng', saveUninitialized: false, resave: false }));
@@ -77,7 +78,7 @@ v1.get("/players/:puid/comments", auth.ensureAdminLevel(1), function (req, res) 
         .then((results) => res.json(results))
         .catch(e => res.status(500).json({error: e.toString()}));
 });
-v1.put("/players/:puid", auth.ensureAdminLevel(1), (req, res) => {
+v1.put("/players/:puid", auth.ensureAdminLevel(1), snagPlayer(r => r.params['puid']), (req, res) => {
     const comment = req.query['comment'];
     const caseType = req.query['case_type'];
 
@@ -88,7 +89,19 @@ v1.put("/players/:puid", auth.ensureAdminLevel(1), (req, res) => {
     if (req.body['admin_level'] && req.body['admin_level'] > req.user.admin_level) {
         return res.status(403).json({error: 'You cannot create a player of higher admin_level than yourself'});
     }
-    // TODO: rank protection
+
+    if (req.player.admin_level > req.user.admin_level) {
+        return res.status(403).json({error: 'You cannot edit a player of higher admin_level than yourself'});
+    }
+
+    const neededRank = Lazy([req.player.rank, req.body['rank']])
+        .map(rankName => config.apd.rankOrder(rankName))
+        .max();
+
+    if (config.apd.rankOrder(req.user.rank) <= neededRank && (req.user.admin_level < 2 || req.user.admin_level < req.player.admin_level)) {
+        return res.status(403).json({error: 'Admin permissions required to edit players of same or higher rank'});
+    }
+
     const commentsSql = squel
         .insert()
         .into('comments')

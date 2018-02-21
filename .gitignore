@@ -62,3 +62,6 @@ typings/
 
 # Webpack build dir
 dist/
+
+# TypeScript build dir (api)
+build/

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ChangeDetectorRef, OnInit, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { MatDialog } from '@angular/material';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Sort } from '@angular/material/sort';
@@ -59,7 +59,7 @@ export class ApdFaction implements AfterViewInit {
     playerCount: number = 0;
     private filterCount: number = 0;
 
-    constructor(private cdr: ChangeDetectorRef, private route: ActivatedRoute, private http: HttpClient, private portalApi: PortalAPI, private dialog: MatDialog) {
+    constructor(private cdr: ChangeDetectorRef, private route: ActivatedRoute, private http: HttpClient, private portalApi: PortalAPI, private dialog: MatDialog, private router: Router) {
         this.localFilter = new Subject();
         this.sort = new Subject();
         this.page = new Subject();
@@ -96,6 +96,11 @@ export class ApdFaction implements AfterViewInit {
             .subscribe(user => {
                 this.user = user;
             });
+        router.events
+            .filter(evt => evt instanceof NavigationEnd)
+            .map(evt => evt.url)
+            .filter(u => u.startsWith("/faction/") && Lazy(u).split("/").size() === 3)
+            .subscribe(() => this.refreshData());
     }
 
     onSortChange(evt: Sort) {
