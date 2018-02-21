@@ -1,0 +1,16 @@
+apd:
+  ranks:
+    - Deputy
+    - Patrol Officer
+    - Corporal
+    - Sergeant
+    - Lieutenant
+    - Deputy Chief of Police
+    - Chief of Police
+  squads:
+    - Alpha
+    - Bravo
+    - Charlie
+    - Delta
+    - Echo
+    - Foxtrot

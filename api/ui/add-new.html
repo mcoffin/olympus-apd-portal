@@ -9,8 +9,8 @@
 				<input [(ngModel)]="data.player.puid" matInput name="puid" placeholder="Steam ID" [disabled]="data.locked['puid']" required>
 			</mat-form-field>
 			<mat-form-field>
-				<mat-select [(ngModel)]="data.player.squad" matInput name="squad" placeholder="Squad" [disabled]="data.locked['squad']" [value]="squads[0]" required>
-					<mat-option *ngFor="let squad of squads" [value]="squad">{{squad}}</mat-option>
+				<mat-select [(ngModel)]="data.player.squad" matInput name="squad" placeholder="Squad" [disabled]="data.locked['squad']" [value]="faction.squads[0]" required>
+					<mat-option *ngFor="let squad of faction.squads" [value]="squad">{{squad}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 		</div>
@@ -20,7 +20,7 @@
 		<div class="input-row">
 			<mat-form-field style="flex: 0 0 auto;">
 				<mat-select [(ngModel)]="data.player.rank" matInput name="rank" placeholder="Rank" [disabled]="data.locked['rank']" required>
-					<mat-option *ngFor="let rank of ranks" [value]="rank">{{rank}}</mat-option>
+					<mat-option *ngFor="let rank of faction.ranks" [value]="rank">{{rank}}</mat-option>
 				</mat-select>
 			</mat-form-field>
 			<mat-form-field style="flex: 0 0 auto;">

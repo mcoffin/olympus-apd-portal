@@ -42,6 +42,7 @@ import { RemoveDialog } from './remove-dialog';
 import { AddNewDialog } from './add-new';
 import { tap } from 'rxjs/operators';
 import { PortalAPI } from './services/portal-api';
+import { FactionService } from './services/faction-service';
 
 @Component({
     template: '<span>Page not Found</span>'
@@ -198,6 +199,7 @@ export class ApdPortalComponent implements OnInit {
         CookieService,
         LoginService,
         PortalAPI,
+        FactionService,
     ],
     bootstrap: [ ApdPortalComponent ],
     entryComponents: [

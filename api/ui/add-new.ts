@@ -6,6 +6,7 @@ import { PortalAPI, Player } from './services/portal-api';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/operators';
 import Lazy from 'lazy.js';
+import { FactionData, FactionService } from './services/faction-service';
 
 export interface PlayerDialogData {
     title: string;
@@ -21,30 +22,14 @@ export interface PlayerDialogData {
     ],
 })
 export class AddNewDialog {
-    squads: string[] = [
-        'Alpha',
-        'Bravo',
-        'Charlie',
-        'Delta',
-        'Echo',
-        'Foxtrot',
-        'Exemptions',
-    ];
+    faction: FactionData;
 
-    ranks: string[] = [
-        'Deputy',
-        'Patrol Officer',
-        'Corporal',
-        'Sergeant',
-        'Lieutenant',
-        'Deputy Chief of Police',
-        'Chief of Police',
-    ];
-
-    constructor(public dialogRef: MatDialogRef<AddNewDialog>, private portalApi: PortalAPI, @Inject(MAT_DIALOG_DATA) public data: PlayerDialogData, private snackBar: MatSnackBar) {
+    constructor(public dialogRef: MatDialogRef<AddNewDialog>, private portalApi: PortalAPI, @Inject(MAT_DIALOG_DATA) public data: PlayerDialogData, private snackBar: MatSnackBar, private factions: FactionService) {
         if (!this.data.player) {
             this.data.player = <Player> {};
         }
+        const fid = data['fid'] || 'apd';
+        this.faction = factions.getFaction(fid);
     }
     private get action(): string {
         return Lazy(this.data.title)

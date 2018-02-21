@@ -40,6 +40,10 @@ module.exports = {
                     { loader: 'sass-loader' },
                 ],
             },
+            {
+                test: /\.ya?ml$/,
+                loaders: 'json-loader!yaml-loader',
+            },
             new SimpleRule(/\.html$/, { loader: 'raw-loader' }),
             new SimpleRule(/\.json$/, { loader: 'json-loader' }),
         ],
