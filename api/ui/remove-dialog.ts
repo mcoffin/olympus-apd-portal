@@ -22,7 +22,7 @@ export class RemoveDialog {
     onSubmit(f: NgForm) {
         if (f.valid) {
             this.portalApi.removePlayer(this.data.puid, f.value.comment)
-                .subscribe(v => this.dialogRef.close(v));
+                .subscribe(() => this.dialogRef.close(this.data));
         }
     }
 }

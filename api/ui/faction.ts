@@ -114,7 +114,8 @@ export class ApdFaction implements AfterViewInit {
         dialogRef.afterClosed()
             .filter((removedPlayer?: Player) => removedPlayer ? true : false)
             .subscribe((removedPlayer?: Player) => {
-                console.warn('TODO: trigger table update');
+                this.loading = true;
+                this.filters.next({});
             });
     }
 
@@ -125,7 +126,8 @@ export class ApdFaction implements AfterViewInit {
         dialogRef.afterClosed()
             .filter((addedPlayer?: Player) => addedPlayer ? true : false)
             .subscribe((addedPlayer: Player) => {
-                console.warn('TODO: trigger table update');
+                this.loading = true;
+                this.filters.next({});
             });
     }
 

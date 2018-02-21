@@ -31,7 +31,7 @@ export class AddNewDialog {
             r.player['comment'] = undefined;
 
             this.portalApi.addPlayer(r)
-                .subscribe(p => this.dialogRef.close(p));
+                .subscribe(p => this.dialogRef.close(r.player));
         }
     }
 }
