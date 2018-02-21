@@ -19,6 +19,11 @@
 		</mat-form-field>
 		<div class="input-row">
 			<mat-form-field style="flex: 0 0 auto;">
+				<mat-select [(ngModel)]="data.player.rank" matInput name="rank" placeholder="Rank" [disabled]="data.locked['rank']" required>
+					<mat-option *ngFor="let rank of ranks" [value]="rank">{{rank}}</mat-option>
+				</mat-select>
+			</mat-form-field>
+			<mat-form-field style="flex: 0 0 auto;">
 				<input [(ngModel)]="data.player.admin_level" matInput name="admin_level" placeholder="Admin Level" type="number" value="0" [disabled]="data.locked['admin_level']" required>
 			</mat-form-field>
 		</div>

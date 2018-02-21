@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 import { Sort } from '@angular/material/sort';
+import Lazy from 'lazy.js';
 
 export interface Player {
     puid: string;
@@ -114,6 +115,27 @@ export class PortalAPI {
             'X-APD-OrderBy': 'timestamp',
         };
         return this.http.get<Comment[]>(`/api/v1/players/${puid}/comments`, { headers: headers, observe: 'response', responseType: 'json', params: params })
+            .map(res => res.body);
+    }
+
+    updatePlayer(player: Player, caseType: string, comment?: string): Observable<any> {
+        const params = {
+            case_type: caseType,
+            comment: comment,
+        };
+        console.log(`update player: ${JSON.stringify(player)}`);
+        const keyWhitelist = [
+            'puid',
+            'p_name',
+            'rank',
+            'squad',
+            'admin_level',
+        ];
+        player = Lazy(player)
+            .pairs()
+            .filter(([k, v]) => keyWhitelist.indexOf(k) >= 0)
+            .toObject();
+        return this.http.put(`/api/v1/players/${player.puid}`, player, { observe: 'response', responseType: 'json', params: params })
             .map(res => res.body);
     }
 

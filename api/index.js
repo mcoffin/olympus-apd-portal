@@ -77,12 +77,60 @@ v1.get("/players/:puid/comments", auth.ensureAdminLevel(1), function (req, res) 
         .then((results) => res.json(results))
         .catch(e => res.status(500).json({error: e.toString()}));
 });
+v1.put("/players/:puid", auth.ensureAdminLevel(1), (req, res) => {
+    const comment = req.query['comment'];
+    const caseType = req.query['case_type'];
+
+    if (!caseType || caseType.length === 0) {
+        return res.status(400).json({error: 'You must provide a case_type value for player edits'});
+    }
+
+    if (req.body['admin_level'] && req.body['admin_level'] >= req.user.admin_level) {
+        return res.status(403).json({error: 'You cannot create a player of higher admin_level than yourself'});
+    }
+    // TODO: rank protection
+    const commentsSql = squel
+        .insert()
+        .into('comments')
+        .set('puid', req.params['puid'])
+        .set('auid', req.user.puid)
+        .set('case_type', caseType)
+        .set('comment', comment);
+    let playersSql = squel
+        .update()
+        .table('players');
+    Lazy(req.body)
+        .pairs()
+        .filter(([k, v]) => k !== 'puid')
+        .filter(([k, v]) => k !== 'p_name')
+        .each(([k, v]) => {
+            playersSql = playersSql.set(k, v);
+        });
+    playersSql = playersSql
+        .where('puid = ?', req.params['puid']);
+    return config.dbConfig.beginTransaction()
+        .then(() => {
+            config.dbConfig
+                .query(playersSql.toString())
+                .then(() => config.dbConfig.query(commentsSql.toString()))
+                .catch((e) => {
+                    return config.dbConfig.rollback()
+                        .then(() => {
+                            throw e;
+                        });
+                });
+        })
+        .then(() => config.dbConfig.commit())
+        .then(() => res.status(204).send(""))
+        .catch((e) => res.status(500).json({error: e.toString()}));
+});
 v1.post("/players", auth.ensureAdminLevel(1), (req, res) => {
     const player = req.body['player'];
     player.rank = "Deputy";
     if (player.admin_level >= req.user.admin_level) {
         return res.status(403).json({error: 'You cannot create a player of higher admin_level than yourself'});
     }
+    // TODO: protect against editing higher ranks
     const comment = req.body['comment'];
     const auid = req.user.puid;
     let commentsSql = squel
