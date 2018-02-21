@@ -114,21 +114,28 @@ export class ApdFaction implements AfterViewInit {
         dialogRef.afterClosed()
             .filter((removedPlayer?: Player) => removedPlayer ? true : false)
             .subscribe((removedPlayer?: Player) => {
-                this.loading = true;
-                this.filters.next({});
+                this.refreshData();
             });
     }
 
     openAddDialog() {
         const dialogRef = this.dialog.open(AddNewDialog, {
+            data: {
+                title: 'Add new',
+                locked: {},
+            },
             minWidth: '70%',
         });
         dialogRef.afterClosed()
             .filter((addedPlayer?: Player) => addedPlayer ? true : false)
             .subscribe((addedPlayer: Player) => {
-                this.loading = true;
-                this.filters.next({});
+                this.refreshData();
             });
+    }
+
+    refreshData() {
+        this.loading = true;
+        this.filters.next({});
     }
 
     onLocalFilterChange(v: string) {

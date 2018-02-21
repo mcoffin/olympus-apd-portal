@@ -78,7 +78,7 @@
 					<mat-card *ngFor="let comment of comments" apd-row-card>
 						<mat-card-header>
 							<mat-card-title>{{comment.author.p_name}}</mat-card-title>
-							<mat-card-subtitle>{{caseTypes[comment.case_type] || comment.case_type}} at {{comment.timestamp}}</mat-card-subtitle>
+							<mat-card-subtitle><span [class.apd-warn]="comment.case_type === 'remove'">{{caseTypes[comment.case_type] || comment.case_type}}</span> at {{comment.timestamp}}</mat-card-subtitle>
 						</mat-card-header>
 						<mat-card-content>
 							<p>{{comment.comment}}</p>

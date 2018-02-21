@@ -3,6 +3,7 @@
 		<ng-container toolbar-card-tools>
 			<span class="dynamic-spacer"></span>
 			<div class="toolbar-buttons">
+				<button (click)="refreshData()" matTooltip="Refresh" mat-icon-button><mat-icon>refresh</mat-icon></button>
 				<button [color]="filterCount > 0 ? 'accent' : 'foreground'" matTooltip="Filters" mat-icon-button><mat-icon>filter_list</mat-icon></button>
 				<button [disabled]="user && user.admin_level < 0" (click)="openAddDialog()" mat-icon-button><mat-icon>add</mat-icon></button>
 			</div>
@@ -23,7 +24,7 @@
 			</ng-container>
 			<ng-container matColumnDef="squad">
 				<mat-header-cell *matHeaderCellDef mat-sort-header>Squad</mat-header-cell>
-				<mat-cell *matCellDef="let element">{{element.squad}}</mat-cell>
+				<mat-cell *matCellDef="let element" [class.apd-warn]="!element.squad">{{element.squad || 'Removed'}}</mat-cell>
 			</ng-container>
 			<ng-container matColumnDef="rank">
 				<mat-header-cell *matHeaderCellDef mat-sort-header>Rank</mat-header-cell>

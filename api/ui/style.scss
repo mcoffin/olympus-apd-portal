@@ -65,6 +65,14 @@ html, body {
 	}
 }
 
+@mixin apd-text-theme($apd-t) {
+	$warn: map-get($apd-t, warn);
+
+	.apd-warn {
+		color: mat-color($warn, darker);
+	}
+}
+
 @mixin apd-dashboard-card-theme($apd-t, $rnr-t) {
 	$primary-apd: map-get($apd-t, primary);
 	$primary-rnr: map-get($rnr-t, primary);
@@ -120,6 +128,7 @@ html, body {
 
 @include apd-dashboard-card-theme($apd-theme, $rnr-theme);
 @include apd-row-card-theme($apd-theme);
+@include apd-text-theme($apd-theme);
 
 // I thought the default layout looked out of whack
 mat-header-cell {

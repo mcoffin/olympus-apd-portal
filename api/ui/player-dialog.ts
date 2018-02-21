@@ -2,6 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { PortalAPI, Player } from './services/portal-api';
+import { AddNewDialog } from './add-new';
 import { Observable } from 'rxjs/Observable';
 import Lazy from 'lazy.js';
 
@@ -45,8 +46,15 @@ export class PlayerDialog {
     }
 
     openDialog(player: Player) {
-        let dialogRef = this.dialog.open(PlayerDialogBox, {
-            data: player,
+        let dialogRef = this.dialog.open(AddNewDialog, {
+            data: {
+                title: 'Edit Player',
+                player: player,
+                locked: {
+                    'p_name': true,
+                    'puid': true,
+                },
+            },
         });
         dialogRef.afterClosed().subscribe((newPlayer?: Player) => {
             if (newPlayer) {
