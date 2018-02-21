@@ -8,9 +8,9 @@
 				<button [disabled]="user && user.admin_level < 0" (click)="openAddDialog()" mat-icon-button><mat-icon>add</mat-icon></button>
 			</div>
 		</ng-container>
-		<section *ngIf="filterMenu" class="apd-darker-background" style="display: block; margin-bottom: 0.83em;">
-			<div class="filter-row">
-				<div class="filter-column">
+		<section *ngIf="filterMenu" style="display: block; margin-bottom: 0.83em;">
+			<div class="filter-row" dir="rtl">
+				<div class="apd-darker-background filter-column">
 					<h4 column-title>Basic</h4>
 					<mat-checkbox matInput (change)="refreshData()" [(ngModel)]="lastFilters.hideRemoved">Hide Removed</mat-checkbox>
 				</div>

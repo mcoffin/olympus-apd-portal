@@ -10,7 +10,7 @@
 	flex-flow: row wrap;
 	align-items: flex-start;
 	justify-content: flex-start;
-	padding: 0.83em;
+	padding: 0;
 
 	.filter-column {
 		display: flex;
@@ -18,6 +18,7 @@
 		align-items: stretch;
 		justify-content: flex-start;
 		margin-right: 0.83em;
+		padding: 0.83em;
 
 		mat-checkbox {
 			margin-bottom: 0.2em;
@@ -31,9 +32,7 @@
 	}
 }
 
-.filter-row[dir=ltr] {
-	justify-content: flex-end;
-
+.filter-row[dir=rtl] {
 	.filter-column {
 		margin-right: 0;
 		margin-left: 0.83em;
