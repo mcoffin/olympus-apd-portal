@@ -85,6 +85,17 @@ export class ApdFaction implements AfterViewInit {
                     nn.push('squad');
                 }
 
+                params.squad = Lazy(filters)
+                    .pairs()
+                    .filter(([k, v]) => v)
+                    .filter(([k, v]) => k !== 'hideRemoved')
+                    .map(([k, v]) => k)
+                    .toArray();
+
+                if (params.squad.length === 0) {
+                    delete params.squad;
+                }
+
                 if (nn.length > 0) {
                     params.__not_null = nn;
                 }

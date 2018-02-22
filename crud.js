@@ -40,9 +40,12 @@ function crudHandler(isCount) {
             .filter(([k, v]) => k !== '__not_null')
             .each(([fieldName, fieldValue]) => {
                 let e = squel.expr();
+                let isFirst = true;
                 Lazy(orSingleton(fieldValue))
-                    .map(v => squel.expr().and(`${fieldName} = ?`, v))
-                    .each(v => e = e.and(v));
+                    .each(v => {
+                        const s = `${fieldName} = ?`;
+                        e = e.or(s, v);
+                    });
                 sql = sql.where(e);
             });
         if (isCount) {
